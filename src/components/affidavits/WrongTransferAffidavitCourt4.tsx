@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+
+import { Button } from '@/components/ui/button';
+
 import PizZip from 'pizzip';
 import { saveAs } from 'file-saver';
 import Docxtemplater from 'docxtemplater';
@@ -91,7 +94,7 @@ export const WrongTransferAffidavitCourt4 = () => {
         type='file'
         onChange={handleFileChange}
       />
-      <button onClick={generateDocument}>Generate document</button>
+      <Button onClick={generateDocument}>Generate document</Button>
       <p>Click the button above to generate a document using ReactJS</p>
       <p>
         You can edit the data in your code in this example. In your app, the
