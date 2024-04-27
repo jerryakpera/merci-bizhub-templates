@@ -29,7 +29,8 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.51.3",
     "tailwind-merge": "^2.3.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "to-words": "^4.0.1"
   },
   "devDependencies": {
     "@iconify-icon/react": "^2.1.0",

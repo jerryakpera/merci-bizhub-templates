@@ -7,11 +7,13 @@ import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Button } from '../ui/button';
 
+import { toWords } from '../globals';
 import { banks, states } from '@/data';
 import { AmountInNo } from '../globals/amounts';
 import { AffidavitFormData } from './interfaces';
 import { FormValidationError } from '../globals';
 import { DatePicker } from '../globals/DatePicker';
+import { filterNonNumbers } from '../globals/amounts/formatAmount';
 
 type Props = {
   setSelectedFile: (selectedFile: File | null) => void;
@@ -43,6 +45,18 @@ export const AffidavitDetailsForm = ({
 
     setValue('dateInWords', format(date, 'PPP'));
   }, [date, setValue]);
+
+  useEffect(() => {
+    const amountInDigits = filterNonNumbers(formattedAmount);
+    let amountInWords = toWords.convert(Number(amountInDigits));
+
+    amountInWords = amountInWords
+      .split(' ')
+      .filter((word) => word !== 'Only')
+      .join(' ');
+
+    setValue('amountInWords', amountInWords);
+  }, [formattedAmount, setValue]);
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) {
@@ -143,6 +157,7 @@ export const AffidavitDetailsForm = ({
             Amount in Words:
           </Label>
           <Input
+            readOnly
             type='text'
             id='amountInWords'
             placeholder='Ten Thousand Naira'
@@ -510,7 +525,13 @@ export const AffidavitDetailsForm = ({
         </div>
       </div>
 
-      <Button type='submit'>Generate</Button>
+      <Button
+        type='submit'
+        className='w-full'
+        size='lg'
+      >
+        Generate
+      </Button>
     </form>
   );
 };

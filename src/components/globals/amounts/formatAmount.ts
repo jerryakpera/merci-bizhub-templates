@@ -1,4 +1,4 @@
-const filterNonNumbers = (val: string): string => {
+export const filterNonNumbers = (val: string): string => {
   // Use regex to replace any non-numeric character or comma with an empty string
   return val.replace(/[^\d.]|(?<=\.\d*)\./g, '');
 };
