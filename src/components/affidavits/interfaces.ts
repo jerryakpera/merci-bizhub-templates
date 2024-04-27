@@ -1,0 +1,20 @@
+export type AffidavitFormData = {
+  gender: string;
+  state: string;
+  lga: string;
+  religion: string;
+  nationality: string;
+  amountInNo?: string;
+  dateInWords: string;
+  amountInWords: string;
+  sender: string;
+  sendersAccountNo: string;
+  sendersBank: string;
+  recipient: string;
+  recipientsBank: string;
+  recipientsAccountNo: string;
+  intendedRecipient: string;
+  intendedRecipientsAccountNo: string;
+  intendedRecipientsBank: string;
+  outputFileName?: string;
+};

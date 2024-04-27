@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 
@@ -7,6 +7,8 @@ import { saveAs } from 'file-saver';
 import Docxtemplater from 'docxtemplater';
 import PizZipUtils from 'pizzip/utils/index.js';
 import expressionParser from 'docxtemplater/expressions';
+import { AffidavitDetailsForm } from './AffidavitDetailsForm';
+import { AffidavitFormData } from './interfaces';
 
 function loadFile(url, callback) {
   PizZipUtils.getBinaryContent(url, callback);
@@ -33,14 +35,14 @@ function capitalizeEveryWord(sentence: string): string {
 }
 
 export const WrongTransferAffidavitCourt4 = () => {
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
-  };
+  // const handleFileChange = (event) => {
+  //   setSelectedFile(event.target.files[0]);
+  // };
 
-  const generateDocument = () => {
-    if (!selectedFile) {
+  const generateDocument = (file: File | null, data: AffidavitFormData) => {
+    if (!file) {
       alert('Please select a file');
       return;
     }
@@ -55,51 +57,59 @@ export const WrongTransferAffidavitCourt4 = () => {
         parser: expressionParser,
       });
       doc.render({
-        gender: capitalizeEveryWord('male'),
-        state: capitalizeEveryWord('plateau'),
-        lga: capitalizeEveryWord('jos north'),
-        religion: capitalizeEveryWord('christian'),
-        nationality: capitalizeEveryWord('nigerian'),
+        gender: capitalizeEveryWord(data.gender),
+        state: capitalizeEveryWord(data.state),
+        lga: capitalizeEveryWord(data.lga),
+        religion: capitalizeEveryWord(data.religion),
+        nationality: capitalizeEveryWord(data.nationality),
 
-        amountInNo: '10,000',
-        dateInWords: '27th April 2024',
-        amountInWords: capitalizeEveryWord('ten thousand naira'),
+        amountInNo: data.amountInNo,
+        dateInWords: capitalizeEveryWord(data.dateInWords),
+        amountInWords: capitalizeEveryWord(data.amountInWords),
 
-        sender: 'Jeremiah Akpera'.toUpperCase(),
-        sendersAccountNo: '2171614013',
-        sendersBank: 'UBA'.toUpperCase(),
+        sender: data.sender.toUpperCase(),
+        sendersAccountNo: data.sendersAccountNo,
+        sendersBank: data.sendersBank.toUpperCase(),
 
-        recipient: 'Israel Akpera'.toUpperCase(),
-        recipientsBank: 'FCMB'.toUpperCase(),
-        recipientsAccountNo: '00104452236',
+        recipient: data.recipient.toUpperCase(),
+        recipientsBank: data.recipientsBank.toUpperCase(),
+        recipientsAccountNo: data.recipientsAccountNo,
 
-        intendedRecipient: 'Patience Akpera'.toUpperCase(),
-        intendedRecipientsAccountNo: '2200023654',
-        intendedRecipientsBank: 'GTB'.toUpperCase(),
+        intendedRecipient: data.intendedRecipient.toUpperCase(),
+        intendedRecipientsBank: data.intendedRecipientsBank.toUpperCase(),
+        intendedRecipientsAccountNo: data.intendedRecipientsAccountNo,
       });
       const out = doc.getZip().generate({
         type: 'blob',
         mimeType:
           'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
       }); //Output the document using Data-URI
-      saveAs(out, 'output.docx');
+      saveAs(out, `${data.outputFileName || 'Affidavit'}.docx`);
     };
-    reader.readAsArrayBuffer(selectedFile);
+    reader.readAsArrayBuffer(file);
+  };
+
+  const handleFormSubmit = (formData: AffidavitFormData) => {
+    generateDocument(selectedFile, formData);
   };
 
   return (
     <div className='p-2'>
-      <h1>Test docxtemplater</h1>
-      <input
+      <AffidavitDetailsForm
+        setSelectedFile={setSelectedFile}
+        handleFormSubmit={handleFormSubmit}
+      />
+      {/* <h1>Test docxtemplater</h1> */}
+      {/* <input
         type='file'
         onChange={handleFileChange}
-      />
-      <Button onClick={generateDocument}>Generate document</Button>
+      /> */}
+      {/* <Button onClick={generateDocument}>Generate document</Button>
       <p>Click the button above to generate a document using ReactJS</p>
       <p>
         You can edit the data in your code in this example. In your app, the
         data would come from your database for example.
-      </p>
+      </p> */}
     </div>
   );
 };
