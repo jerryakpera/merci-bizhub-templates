@@ -22,7 +22,7 @@ export const AmountInNo = ({ formattedAmount, setFormattedAmount }: Props) => {
       </Label>
       <Input
         required
-        type='text'
+        type='string'
         id='amountInNo'
         placeholder='10,000'
         value={formattedAmount}
@@ -30,6 +30,7 @@ export const AmountInNo = ({ formattedAmount, setFormattedAmount }: Props) => {
         onBlur={(e) => {
           const { value } = e.target;
           const formattedValue = formatAmount(value);
+
           setFormattedAmount(formattedValue);
         }}
       />

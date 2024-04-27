@@ -1,5 +1,6 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
+import { format } from 'date-fns';
 import { useForm } from 'react-hook-form';
 
 import { Input } from '../ui/input';
@@ -7,9 +8,10 @@ import { Label } from '../ui/label';
 import { Button } from '../ui/button';
 
 import { banks, states } from '@/data';
+import { AmountInNo } from '../globals/amounts';
 import { AffidavitFormData } from './interfaces';
 import { FormValidationError } from '../globals';
-import { AmountInNo } from '../globals/amounts';
+import { DatePicker } from '../globals/DatePicker';
 
 type Props = {
   setSelectedFile: (selectedFile: File | null) => void;
@@ -20,16 +22,27 @@ export const AffidavitDetailsForm = ({
   setSelectedFile,
   handleFormSubmit,
 }: Props) => {
+  const [date, setDate] = useState<Date>();
   const [formattedAmount, setFormattedAmount] = useState('');
 
   const {
     register,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm<AffidavitFormData>({
     mode: 'onChange',
     reValidateMode: 'onChange',
+    defaultValues: {
+      dateInWords: date ? format(date, 'PPP') : '',
+    },
   });
+
+  useEffect(() => {
+    if (!date) return;
+
+    setValue('dateInWords', format(date, 'PPP'));
+  }, [date, setValue]);
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) {
@@ -94,11 +107,19 @@ export const AffidavitDetailsForm = ({
           >
             Date in Words:
           </Label>
-          <Input
-            type='text'
-            placeholder='17th April, 2024'
-            {...register('dateInWords', { required: true })}
-          />
+          <div className='flex gap-x-1 items-center'>
+            <Input
+              readOnly
+              type='text'
+              placeholder='17th April, 2024'
+              {...register('dateInWords', { required: true })}
+            />
+
+            <DatePicker
+              date={date}
+              setDate={setDate}
+            />
+          </div>
 
           {errors.dateInWords && (
             <FormValidationError error={errors.dateInWords} />
