@@ -5,8 +5,8 @@ import { saveAs } from 'file-saver';
 import Docxtemplater from 'docxtemplater';
 import expressionParser from 'docxtemplater/expressions';
 
-import { AffidavitFormData } from './interfaces';
-import { AffidavitDetailsForm } from './AffidavitDetailsForm';
+import { AffidavitFormData } from '../components/affidavits/interfaces';
+import { AffidavitDetailsForm } from '../components/affidavits/AffidavitDetailsForm';
 
 function capitalizeEveryWord(sentence: string): string {
   // Check if the sentence is empty or null
@@ -28,7 +28,7 @@ function capitalizeEveryWord(sentence: string): string {
   return capitalizedWords.join(' ');
 }
 
-export const WrongTransferAffidavitCourt4 = () => {
+export const BasicWrongTransferAffidavit = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const generateDocument = (file: File | null, data: AffidavitFormData) => {

@@ -12,6 +12,10 @@ export const router = createBrowserRouter([
         index: true,
         element: <pages.HomePage />,
       },
+      {
+        path: '/basic-wrong-transfer-affidavit',
+        element: <pages.BasicWrongTransferAffidavit />,
+      },
     ],
   },
 ]);
