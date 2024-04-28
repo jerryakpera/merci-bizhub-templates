@@ -1,9 +1,6 @@
-import { WrongTransferAffidavitCourt4 } from './components/affidavits';
+// import { WrongTransferAffidavitCourt4 } from './components/affidavits';
+import { Layout } from './components/layout';
 
 export default function App() {
-  return (
-    <div className='bg-[#F6F5F2]'>
-      <WrongTransferAffidavitCourt4 />
-    </div>
-  );
+  return <Layout />;
 }
