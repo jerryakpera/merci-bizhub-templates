@@ -1,18 +1,12 @@
 import { useState } from 'react';
 
-import { Button } from '@/components/ui/button';
-
 import PizZip from 'pizzip';
 import { saveAs } from 'file-saver';
 import Docxtemplater from 'docxtemplater';
-import PizZipUtils from 'pizzip/utils/index.js';
 import expressionParser from 'docxtemplater/expressions';
-import { AffidavitDetailsForm } from './AffidavitDetailsForm';
-import { AffidavitFormData } from './interfaces';
 
-function loadFile(url, callback) {
-  PizZipUtils.getBinaryContent(url, callback);
-}
+import { AffidavitFormData } from './interfaces';
+import { AffidavitDetailsForm } from './AffidavitDetailsForm';
 
 function capitalizeEveryWord(sentence: string): string {
   // Check if the sentence is empty or null
@@ -36,10 +30,6 @@ function capitalizeEveryWord(sentence: string): string {
 
 export const WrongTransferAffidavitCourt4 = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-
-  // const handleFileChange = (event) => {
-  //   setSelectedFile(event.target.files[0]);
-  // };
 
   const generateDocument = (file: File | null, data: AffidavitFormData) => {
     if (!file) {
@@ -99,17 +89,6 @@ export const WrongTransferAffidavitCourt4 = () => {
         setSelectedFile={setSelectedFile}
         handleFormSubmit={handleFormSubmit}
       />
-      {/* <h1>Test docxtemplater</h1> */}
-      {/* <input
-        type='file'
-        onChange={handleFileChange}
-      /> */}
-      {/* <Button onClick={generateDocument}>Generate document</Button>
-      <p>Click the button above to generate a document using ReactJS</p>
-      <p>
-        You can edit the data in your code in this example. In your app, the
-        data would come from your database for example.
-      </p> */}
     </div>
   );
 };

@@ -28,6 +28,7 @@ export const AffidavitDetailsForm = ({
   const [formattedAmount, setFormattedAmount] = useState('');
 
   const {
+    reset,
     register,
     setValue,
     handleSubmit,
@@ -53,6 +54,10 @@ export const AffidavitDetailsForm = ({
     amountInWords = amountInWords
       .split(' ')
       .filter((word) => word !== 'Only')
+      .map((word) => {
+        if (word.toLowerCase() === 'paise') return 'Kobo';
+        return word;
+      })
       .join(' ');
 
     setValue('amountInWords', amountInWords);
@@ -525,13 +530,24 @@ export const AffidavitDetailsForm = ({
         </div>
       </div>
 
-      <Button
-        type='submit'
-        className='w-full'
-        size='lg'
-      >
-        Generate
-      </Button>
+      <div className='flex gap-x-2'>
+        <Button
+          size='lg'
+          type='button'
+          className='flex-1'
+          variant='destructive'
+          onClick={() => reset()}
+        >
+          Reset
+        </Button>
+        <Button
+          size='lg'
+          type='submit'
+          className='flex-1'
+        >
+          Generate
+        </Button>
+      </div>
     </form>
   );
 };
