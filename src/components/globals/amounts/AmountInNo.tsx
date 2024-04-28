@@ -15,7 +15,7 @@ export const AmountInNo = ({ formattedAmount, setFormattedAmount }: Props) => {
   return (
     <>
       <Label
-        htmlFor='amountInNo'
+        htmlFor='amount'
         className='text-sm text-zinc-500'
       >
         Amount in Number:
@@ -23,7 +23,7 @@ export const AmountInNo = ({ formattedAmount, setFormattedAmount }: Props) => {
       <Input
         required
         type='string'
-        id='amountInNo'
+        id='amount'
         placeholder='10,000'
         value={formattedAmount}
         onChange={handleAmountChange}

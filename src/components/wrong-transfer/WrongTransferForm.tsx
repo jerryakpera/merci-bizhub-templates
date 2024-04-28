@@ -8,23 +8,26 @@ import { Label } from '../ui/label';
 import { Button } from '../ui/button';
 
 import { toWords } from '../globals';
-import { banks, states } from '@/data';
 import { AmountInNo } from '../globals/amounts';
-import { AffidavitFormData } from './interfaces';
 import { FormValidationError } from '../globals';
 import { DatePicker } from '../globals/DatePicker';
+import { WrongTransferFormData } from './interfaces';
+import { banks, states, transactionMethods } from '@/data';
 import { filterNonNumbers } from '../globals/amounts/formatAmount';
 
 type Props = {
   setSelectedFile: (selectedFile: File | null) => void;
-  handleFormSubmit: (formData: AffidavitFormData) => void;
+  handleFormSubmit: (formData: WrongTransferFormData) => void;
 };
 
-export const AffidavitDetailsForm = ({
+export const WrongTransferForm = ({
   setSelectedFile,
   handleFormSubmit,
 }: Props) => {
-  const [date, setDate] = useState<Date>();
+  const [dateOfOrder, setDateOfOrder] = useState<Date>();
+  const [dateOfTransaction, setDateOfTransaction] = useState<Date>();
+
+  const [wordAmount, setWordAmount] = useState('');
   const [formattedAmount, setFormattedAmount] = useState('');
 
   const {
@@ -33,19 +36,28 @@ export const AffidavitDetailsForm = ({
     setValue,
     handleSubmit,
     formState: { errors },
-  } = useForm<AffidavitFormData>({
+  } = useForm<WrongTransferFormData>({
     mode: 'onChange',
     reValidateMode: 'onChange',
     defaultValues: {
-      dateInWords: date ? format(date, 'PPP') : '',
+      dateOfOrderInWords: dateOfOrder ? format(dateOfOrder, 'PPP') : '',
+      dateOfTransactionInWords: dateOfTransaction
+        ? format(dateOfTransaction, 'PPP')
+        : '',
     },
   });
 
   useEffect(() => {
-    if (!date) return;
+    if (!dateOfTransaction) return;
+    setValue('dateOfTransaction', dateOfTransaction);
+    setValue('dateOfTransactionInWords', format(dateOfTransaction, 'PPP'));
+  }, [dateOfTransaction, setValue]);
 
-    setValue('dateInWords', format(date, 'PPP'));
-  }, [date, setValue]);
+  useEffect(() => {
+    if (!dateOfOrder) return;
+    setValue('dateOfOrder', dateOfOrder);
+    setValue('dateOfOrderInWords', format(dateOfOrder, 'PPP'));
+  }, [dateOfOrder, setValue]);
 
   useEffect(() => {
     const amountInDigits = filterNonNumbers(formattedAmount);
@@ -60,6 +72,7 @@ export const AffidavitDetailsForm = ({
       })
       .join(' ');
 
+    setWordAmount(amountInWords);
     setValue('amountInWords', amountInWords);
   }, [formattedAmount, setValue]);
 
@@ -71,8 +84,8 @@ export const AffidavitDetailsForm = ({
     }
   };
 
-  const onSubmit = (formData: AffidavitFormData) => {
-    formData.amountInNo = formattedAmount;
+  const onSubmit = (formData: WrongTransferFormData) => {
+    formData.amount = formattedAmount;
 
     handleFormSubmit(formData);
   };
@@ -114,6 +127,37 @@ export const AffidavitDetailsForm = ({
             {...register('outputFileName', {})}
           />
         </div>
+
+        {/* Date of order in words */}
+        <div className='flex-1 flex flex-col'>
+          <Label
+            htmlFor='dateOfOrderInWords'
+            className='text-sm text-zinc-500'
+          >
+            Date of order/affidavit in words:
+          </Label>
+          <div className='flex gap-x-1 items-center'>
+            <Input
+              readOnly
+              type='text'
+              {...register('dateOfOrderInWords', { required: true })}
+            />
+
+            <input
+              type='hidden'
+              {...register('dateOfOrder')}
+            />
+
+            <DatePicker
+              date={dateOfOrder}
+              setDate={setDateOfOrder}
+            />
+          </div>
+
+          {errors.dateOfOrderInWords && (
+            <FormValidationError error={errors.dateOfOrderInWords} />
+          )}
+        </div>
       </div>
 
       {/* Date and amounts */}
@@ -121,54 +165,77 @@ export const AffidavitDetailsForm = ({
         {/* Date in Words */}
         <div className='flex-1 flex flex-col'>
           <Label
-            htmlFor='dateInWords'
+            htmlFor='dateOfTransactionInWords'
             className='text-sm text-zinc-500'
           >
-            Date in Words:
+            Transaction date:
           </Label>
           <div className='flex gap-x-1 items-center'>
             <Input
               readOnly
               type='text'
               placeholder='17th April, 2024'
-              {...register('dateInWords', { required: true })}
+              {...register('dateOfTransactionInWords', { required: true })}
+            />
+
+            <input
+              type='hidden'
+              {...register('dateOfTransaction')}
             />
 
             <DatePicker
-              date={date}
-              setDate={setDate}
+              date={dateOfTransaction}
+              setDate={setDateOfTransaction}
             />
           </div>
 
-          {errors.dateInWords && (
-            <FormValidationError error={errors.dateInWords} />
+          {errors.dateOfTransactionInWords && (
+            <FormValidationError error={errors.dateOfTransactionInWords} />
           )}
         </div>
 
-        {/* Amount in Number */}
+        {/* Amount */}
         <div className='w-1/3 flex flex-col'>
           <AmountInNo
             formattedAmount={formattedAmount}
             setFormattedAmount={setFormattedAmount}
           />
+          <div className='text-xs mt-0.5 px-1 text-gray-700 font-semibold'>
+            {wordAmount}
+          </div>
         </div>
 
-        {/* Amount in Words */}
+        {/* Transaction method */}
         <div className='flex-1 flex flex-col'>
           <Label
-            htmlFor='amountInWords'
+            htmlFor='transactionMethod'
             className='text-sm text-zinc-500'
           >
-            Amount in Words:
+            Transaction method:
           </Label>
-          <Input
-            readOnly
-            type='text'
-            id='amountInWords'
-            placeholder='Ten Thousand Naira'
-            {...register('amountInWords', { required: true })}
-          />
-          {errors.amountInWords && <span>This field is required</span>}
+          <select
+            id='transactionMethod'
+            defaultValue={'mobile'}
+            className='border border-gray-200 text-sm px-2 rounded-md py-[7px] drop-shadow-xs'
+            {...register('transactionMethod', {
+              required: 'Select the method used for the transaction',
+            })}
+          >
+            {transactionMethods.map((transactionMethod) => {
+              return (
+                <option
+                  key={transactionMethod}
+                  value={transactionMethod.toLowerCase()}
+                >
+                  {transactionMethod}
+                </option>
+              );
+            })}
+          </select>
+
+          {errors.transactionMethod && (
+            <FormValidationError error={errors.transactionMethod} />
+          )}
         </div>
       </div>
 

@@ -25,12 +25,12 @@ export const TemplateCard = ({ link, title, description, court }: Props) => {
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
-      <CardContent className='grid gap-4'>
+      {/* <CardContent className='grid gap-4'>
         <p className='text-sm text-muted-foreground'>
           <strong>Court: </strong>
           {court}
         </p>
-      </CardContent>
+      </CardContent> */}
       <CardFooter>
         <Link
           to={link}

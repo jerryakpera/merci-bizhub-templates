@@ -2,11 +2,12 @@ import { useState } from 'react';
 
 import PizZip from 'pizzip';
 import { saveAs } from 'file-saver';
+import { format } from 'date-fns';
 import Docxtemplater from 'docxtemplater';
 import expressionParser from 'docxtemplater/expressions';
 
-import { AffidavitFormData } from '../components/affidavits/interfaces';
-import { AffidavitDetailsForm } from '../components/affidavits/AffidavitDetailsForm';
+import { WrongTransferForm } from '@/components/wrong-transfer';
+import { WrongTransferFormData } from '@/components/wrong-transfer/interfaces';
 
 function capitalizeEveryWord(sentence: string): string {
   // Check if the sentence is empty or null
@@ -28,10 +29,10 @@ function capitalizeEveryWord(sentence: string): string {
   return capitalizedWords.join(' ');
 }
 
-export const BasicWrongTransferAffidavit = () => {
+export const WrongTransfer = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  const generateDocument = (file: File | null, data: AffidavitFormData) => {
+  const generateDocument = (file: File | null, data: WrongTransferFormData) => {
     if (!file) {
       alert('Please select a file');
       return;
@@ -53,9 +54,18 @@ export const BasicWrongTransferAffidavit = () => {
         religion: capitalizeEveryWord(data.religion),
         nationality: capitalizeEveryWord(data.nationality),
 
-        amountInNo: data.amountInNo,
-        dateInWords: capitalizeEveryWord(data.dateInWords),
+        amount: data.amount,
         amountInWords: capitalizeEveryWord(data.amountInWords),
+        transactionMethod: capitalizeEveryWord(data.transactionMethod),
+
+        dateOfOrderInWords: data.dateOfOrderInWords,
+        dateOfOrder: format(data?.dateOfOrder || new Date(), 'dd/MM/yyyy'),
+
+        dateOfTransactionInWords: data.dateOfTransactionInWords,
+        dateOfTransaction: format(
+          data?.dateOfTransaction || new Date(),
+          'dd/MM/yyyy'
+        ),
 
         sender: data.sender.toUpperCase(),
         sendersAccountNo: data.sendersAccountNo,
@@ -79,13 +89,13 @@ export const BasicWrongTransferAffidavit = () => {
     reader.readAsArrayBuffer(file);
   };
 
-  const handleFormSubmit = (formData: AffidavitFormData) => {
+  const handleFormSubmit = (formData: WrongTransferFormData) => {
     generateDocument(selectedFile, formData);
   };
 
   return (
     <div className='p-2'>
-      <AffidavitDetailsForm
+      <WrongTransferForm
         setSelectedFile={setSelectedFile}
         handleFormSubmit={handleFormSubmit}
       />

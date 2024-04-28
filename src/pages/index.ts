@@ -1,2 +1,2 @@
 export * from './HomePage';
-export * from './BasicWrongTransferAffidavit';
+export * from './WrongTransfer';

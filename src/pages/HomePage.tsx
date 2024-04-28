@@ -4,18 +4,10 @@ const templates = [
   {
     id: 1,
     court: 'All',
-    title: 'Wrong Transfer - Affidavit',
-    link: '/basic-wrong-transfer-affidavit',
+    title: 'Wrong Transfer',
+    link: '/wrong-transfer',
     description:
-      'Affidavit for wrong transfer of funds. Can be used for both Court 4 and Court 5.',
-  },
-  {
-    id: 2,
-    court: 'All',
-    title: 'Wrong Transfer - Court Order',
-    link: '/basic-wrong-transfer-court-order',
-    description:
-      'Court Order for wrong transfer of funds. Can be used for both Court 4 and Court 5.',
+      'Generate an affidavit and/or court order for reversal of a wrong transfer.',
   },
 ];
 
