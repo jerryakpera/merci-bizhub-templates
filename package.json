@@ -24,6 +24,7 @@
     "date-fns": "^3.6.0",
     "docxtemplater": "^3.47.1",
     "file-saver": "^2.0.5",
+    "firebase": "^10.11.1",
     "pizzip": "^3.1.7",
     "react": "^18.2.0",
     "react-day-picker": "^8.10.1",
