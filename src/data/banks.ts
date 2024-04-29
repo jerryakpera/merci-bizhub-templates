@@ -1,17 +1,19 @@
 export const banks = [
   'Access Bank',
   'First Bank',
-  'Zenith Bank',
   'UBA',
   'GTBank',
   'Fidelity Bank',
+  'Chipper Cash',
   'Ecobank Nigeria',
+  'Kuda',
   'MoniePoint MicroFinance',
   'Stanbic IBTC Bank',
   'FCMB',
   'Union Bank',
   'Sterling Bank',
   'OPay',
+  'PalmPay',
   'Polaris Bank',
   'Wema Bank',
   'Heritage Bank',
@@ -20,4 +22,5 @@ export const banks = [
   'Stanbic Mobile Money',
   'Jaiz Bank',
   'SunTrust Bank',
-];
+  'Zenith Bank',
+].sort();
