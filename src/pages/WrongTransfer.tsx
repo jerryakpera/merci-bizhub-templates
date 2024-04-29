@@ -58,7 +58,7 @@ export const WrongTransfer = () => {
         amountInWords: capitalizeEveryWord(data.amountInWords),
         transactionMethod: capitalizeEveryWord(data.transactionMethod),
 
-        dateOfOrderInWords: data.dateOfOrderInWords,
+        dateOfOrderInWords: data.dateOfOrderInWords?.toUpperCase(),
         dateOfOrder: format(data?.dateOfOrder || new Date(), 'dd/MM/yyyy'),
 
         dateOfTransactionInWords: data.dateOfTransactionInWords,
