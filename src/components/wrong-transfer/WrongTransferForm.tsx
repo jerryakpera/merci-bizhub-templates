@@ -95,7 +95,7 @@ export const WrongTransferForm = ({
       className='space-y-6'
       onSubmit={handleSubmit(onSubmit)}
     >
-      <div className='flex gap-x-2 w-full'>
+      <div className='flex flex-col sm:flex-row gap-y-2 sm:gap-y-0 gap-x-2 w-full'>
         {/* Template file */}
         <div className='flex-1 flex flex-col'>
           <Label
@@ -161,7 +161,7 @@ export const WrongTransferForm = ({
       </div>
 
       {/* Date and amounts */}
-      <div className='flex gap-x-2 w-full'>
+      <div className='flex flex-col sm:flex-row gap-y-2 sm:gap-y-0 gap-x-2 w-full'>
         {/* Date in Words */}
         <div className='flex-1 flex flex-col'>
           <Label
@@ -195,7 +195,7 @@ export const WrongTransferForm = ({
         </div>
 
         {/* Amount */}
-        <div className='w-1/3 flex flex-col'>
+        <div className='w-full sm:w-1/3 flex flex-col'>
           <AmountInNo
             formattedAmount={formattedAmount}
             setFormattedAmount={setFormattedAmount}
@@ -239,7 +239,7 @@ export const WrongTransferForm = ({
         </div>
       </div>
 
-      <div className='flex gap-x-2 w-full'>
+      <div className='flex flex-col sm:flex-row gap-y-2 sm:gap-y-0 gap-x-2 w-full'>
         {/* Sender */}
         <div className='flex-1 flex flex-col'>
           <Label
@@ -313,9 +313,9 @@ export const WrongTransferForm = ({
         </div>
       </div>
 
-      <div className='flex gap-x-2 w-full'>
+      <div className='flex flex-col sm:flex-row gap-y-2 sm:gap-y-0 gap-x-2 w-full'>
         {/* Gender */}
-        <div className='flex flex-col w-1/3'>
+        <div className='flex flex-col w-full sm:w-1/3'>
           <Label
             htmlFor='gender'
             className='text-sm text-zinc-500'
@@ -375,7 +375,7 @@ export const WrongTransferForm = ({
         </div>
       </div>
 
-      <div className='flex gap-x-2 w-full'>
+      <div className='flex flex-col sm:flex-row gap-y-2 sm:gap-y-0 gap-x-2 w-full'>
         {/* Nationality */}
         <div className='flex-1 flex flex-col'>
           <Label
@@ -447,7 +447,7 @@ export const WrongTransferForm = ({
         </div>
       </div>
 
-      <div className='flex gap-x-2 w-full'>
+      <div className='flex flex-col sm:flex-row gap-y-2 sm:gap-y-0 gap-x-2 w-full'>
         {/* Recipient */}
         <div className='flex-1 flex flex-col'>
           <Label
@@ -521,7 +521,7 @@ export const WrongTransferForm = ({
         </div>
       </div>
 
-      <div className='flex gap-x-2 w-full'>
+      <div className='flex flex-col sm:flex-row gap-y-2 sm:gap-y-0 gap-x-2 w-full'>
         {/* Intended Recipient */}
         <div className='flex-1 flex flex-col'>
           <Label
