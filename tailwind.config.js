@@ -37,6 +37,11 @@ export default {
   ],
   prefix: '',
   theme: {
+    fontFamily: {
+      cursive: ['Klee One', 'cursive'],
+      sans: ['Poppins', 'sans-serif'],
+      // serif: ['Playfair Display', 'serif'],
+    },
     screens: {
       'xs': '320px',
       'sm': '576px',
@@ -58,12 +63,12 @@ export default {
     },
     extend: {
       colors: {
-        info: generatePrimaryColors('#1A365D'),
-        danger: generatePrimaryColors('#63171B'),
-        primary: generatePrimaryColors('#A34343'),
-        warning: generatePrimaryColors('#652B19'),
-        success: generatePrimaryColors('#1C4532'),
-        secondary: generatePrimaryColors('#1A1F2E'),
+        info: '#1A365D',
+        danger: '#63171B',
+        primary: '#FE7134',
+        warning: '#652B19',
+        success: '#1C4532',
+        secondary: '#151E3F',
       },
       keyframes: {
         'accordion-down': {

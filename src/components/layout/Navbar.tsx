@@ -1,26 +1,32 @@
 import { Link } from 'react-router-dom';
 
-import { Icon } from '@iconify/react/dist/iconify.js';
-
 export const Navbar = () => {
   return (
-    <div className='w-full h-12 bg-secondary-800'>
-      <div className='w-full h-full flex justify-between items-center px-2 md:w-11/12 md:mx-auto lg:w-5/6'>
-        <div>
-          <Link
-            to='/'
-            className='flex gap-x-2 text-white items-center'
-          >
-            <Icon
-              icon='ri:home-fill'
-              className='text-xl'
-            />
-            <span className='font-semibold uppercase tracking-wider'>
-              Merci
-            </span>
-          </Link>
-        </div>
-      </div>
-    </div>
+    <nav className='flex flex-wrap items-center mb-5 text-base md:mb-0 md:pl-8 md:ml-8 md:border-l md:border-gray-200'>
+      <Link
+        to='/'
+        className='mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900'
+      >
+        Home
+      </Link>
+      <Link
+        to='/'
+        className='mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900'
+      >
+        Features
+      </Link>
+      <Link
+        to='/'
+        className='mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900'
+      >
+        Pricing
+      </Link>
+      <Link
+        to='/'
+        className='mr-5 font-medium leading-6 text-gray-600 hover:text-gray-900'
+      >
+        Blog
+      </Link>
+    </nav>
   );
 };
