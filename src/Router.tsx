@@ -16,6 +16,10 @@ export const router = createBrowserRouter([
         path: '/wrong-transfer',
         element: <pages.WrongTransfer />,
       },
+      {
+        path: '/affidavit',
+        element: <pages.Affidavit />,
+      },
     ],
   },
 ]);

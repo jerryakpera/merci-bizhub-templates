@@ -7,7 +7,14 @@ const templates = [
     title: 'Wrong Transfer',
     link: '/wrong-transfer',
     description:
-      'Generate an affidavit and/or court order for reversal of a wrong transfer.',
+      'Generates affidavit and/or court order for reversal of a wrong transfer.',
+  },
+  {
+    id: 2,
+    court: 'All',
+    title: 'Affidavit',
+    link: '/affidavit',
+    description: 'Generates court affidavit for different scenarios.',
   },
 ];
 
