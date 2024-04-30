@@ -5,12 +5,14 @@ import { MTSelect } from '@/components/globals';
 import { affidavitTypes } from '@/data/affidavits';
 import {
   ChangeOfNameForm,
+  GuardianshipForm,
   ChangeOfRegistrationOnSimForm,
 } from '@/components/affidavit';
 import {
   AffidavitFormData,
   ChangeOfNameFormData,
-  ChangeOfRegistrationOnSimData,
+  GuardianshipFormData,
+  ChangeOfRegistrationOnSimFormData,
 } from '@/components/affidavit/interfaces';
 
 export const Affidavit = () => {
@@ -47,7 +49,16 @@ export const Affidavit = () => {
             <ChangeOfRegistrationOnSimForm
               setSelectedFile={setSelectedFile}
               handleFormSubmit={(formData) =>
-                handleFormSubmit<ChangeOfRegistrationOnSimData>(formData)
+                handleFormSubmit<ChangeOfRegistrationOnSimFormData>(formData)
+              }
+            />
+          )}
+
+          {selected === 'Affidavit as to Guardianship'.toLowerCase() && (
+            <GuardianshipForm
+              setSelectedFile={setSelectedFile}
+              handleFormSubmit={(formData) =>
+                handleFormSubmit<GuardianshipFormData>(formData)
               }
             />
           )}

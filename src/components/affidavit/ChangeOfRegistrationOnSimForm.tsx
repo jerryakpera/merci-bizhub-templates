@@ -9,12 +9,12 @@ import { Button } from '../ui/button';
 import { states } from '@/data';
 import { capitalizeEveryWord } from '@/utils';
 import { FormValidationError } from '../globals';
-import { ChangeOfRegistrationOnSimData } from './interfaces';
+import { ChangeOfRegistrationOnSimFormData } from './interfaces';
 import { networks } from '@/data/networks';
 
 type Props = {
   setSelectedFile: (selectedFile: File | null) => void;
-  handleFormSubmit: (formData: ChangeOfRegistrationOnSimData) => void;
+  handleFormSubmit: (formData: ChangeOfRegistrationOnSimFormData) => void;
 };
 
 export const ChangeOfRegistrationOnSimForm = ({
@@ -26,7 +26,7 @@ export const ChangeOfRegistrationOnSimForm = ({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ChangeOfRegistrationOnSimData>({
+  } = useForm<ChangeOfRegistrationOnSimFormData>({
     mode: 'onChange',
     reValidateMode: 'onChange',
   });
@@ -39,7 +39,7 @@ export const ChangeOfRegistrationOnSimForm = ({
     }
   };
 
-  const onSubmit = (formData: ChangeOfRegistrationOnSimData) => {
+  const onSubmit = (formData: ChangeOfRegistrationOnSimFormData) => {
     const data = {
       phone: formData.phone,
       name: formData.name.toUpperCase(),

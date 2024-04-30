@@ -25,7 +25,7 @@ export type ChangeOfNameFormData = AffidavitFormData & {
   authority: string;
 };
 
-export type ChangeOfRegistrationOnSimData = AffidavitFormData & {
+export type ChangeOfRegistrationOnSimFormData = AffidavitFormData & {
   // Names
   name: string;
   previousName: string;
@@ -33,4 +33,15 @@ export type ChangeOfRegistrationOnSimData = AffidavitFormData & {
   // Phone details
   phone: string;
   simNetwork: string;
+};
+
+export type GuardianshipFormData = AffidavitFormData & {
+  guardiansName: string;
+  minorsName: string;
+  minorsAge: string;
+  minorsAgeInWords: string;
+  minorsGender: string;
+  authority: string;
+
+  relationshipToMinor: string;
 };
