@@ -1,4 +1,4 @@
-import { ChangeEvent, useState, useEffect } from 'react';
+import { ChangeEvent, useState } from 'react';
 
 import { formatDate } from 'date-fns';
 import { useForm } from 'react-hook-form';
@@ -9,8 +9,8 @@ import { Button } from '../ui/button';
 
 import { states } from '@/data';
 import { capitalizeEveryWord, createDateFromFormat, dobRegex } from '@/utils';
+import { FormValidationError } from '../globals';
 import { ChangeOfDateOfBirthFormData } from './interfaces';
-import { DatePicker, FormValidationError } from '../globals';
 
 type Props = {
   setSelectedFile: (selectedFile: File | null) => void;
