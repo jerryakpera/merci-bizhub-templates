@@ -6,12 +6,14 @@ import { affidavitTypes } from '@/data/affidavits';
 import {
   ChangeOfNameForm,
   GuardianshipForm,
+  ChangeOfDateOfBirthForm,
   ChangeOfRegistrationOnSimForm,
 } from '@/components/affidavit';
 import {
   AffidavitFormData,
   ChangeOfNameFormData,
   GuardianshipFormData,
+  ChangeOfDateOfBirthFormData,
   ChangeOfRegistrationOnSimFormData,
 } from '@/components/affidavit/interfaces';
 
@@ -59,6 +61,15 @@ export const Affidavit = () => {
               setSelectedFile={setSelectedFile}
               handleFormSubmit={(formData) =>
                 handleFormSubmit<GuardianshipFormData>(formData)
+              }
+            />
+          )}
+
+          {selected === 'Change of Date of Birth'.toLowerCase() && (
+            <ChangeOfDateOfBirthForm
+              setSelectedFile={setSelectedFile}
+              handleFormSubmit={(formData) =>
+                handleFormSubmit<ChangeOfDateOfBirthFormData>(formData)
               }
             />
           )}

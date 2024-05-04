@@ -1,5 +1,6 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useState, useEffect } from 'react';
 
+import { formatDate } from 'date-fns';
 import { useForm } from 'react-hook-form';
 
 import { Input } from '../ui/input';
@@ -7,26 +8,30 @@ import { Label } from '../ui/label';
 import { Button } from '../ui/button';
 
 import { states } from '@/data';
-import { capitalizeEveryWord } from '@/utils';
-import { FormValidationError } from '../globals';
-import { ChangeOfRegistrationOnSimFormData } from './interfaces';
-import { networks } from '@/data/networks';
+import { capitalizeEveryWord, createDateFromFormat, dobRegex } from '@/utils';
+import { ChangeOfDateOfBirthFormData } from './interfaces';
+import { DatePicker, FormValidationError } from '../globals';
 
 type Props = {
   setSelectedFile: (selectedFile: File | null) => void;
-  handleFormSubmit: (formData: ChangeOfRegistrationOnSimFormData) => void;
+  handleFormSubmit: (formData: ChangeOfDateOfBirthFormData) => void;
 };
 
-export const ChangeOfRegistrationOnSimForm = ({
+export const ChangeOfDateOfBirthForm = ({
   setSelectedFile,
   handleFormSubmit,
 }: Props) => {
+  const [wrongDobInWords, setWrongDobInWords] = useState<string>();
+  const [correctDobInWords, setCorrectDobInWords] = useState<string>();
+
   const {
     reset,
     register,
+    setValue,
+    getValues,
     handleSubmit,
     formState: { errors },
-  } = useForm<ChangeOfRegistrationOnSimFormData>({
+  } = useForm<ChangeOfDateOfBirthFormData>({
     mode: 'onChange',
     reValidateMode: 'onChange',
   });
@@ -39,18 +44,44 @@ export const ChangeOfRegistrationOnSimForm = ({
     }
   };
 
-  const onSubmit = (formData: ChangeOfRegistrationOnSimFormData) => {
+  const handleWrongDobChange = () => {
+    const wrongDob = getValues('wrongDob');
+
+    if (errors.wrongDob || !dobRegex.test(wrongDob)) return;
+
+    const wrongDobDate = createDateFromFormat(wrongDob);
+    const formatedWrongDob = formatDate(wrongDobDate, 'do MMMM, yyyy');
+
+    setWrongDobInWords(formatedWrongDob);
+    setValue('wrongDobInWords', formatedWrongDob);
+  };
+
+  const handleCorrectDobChange = () => {
+    const correctDob = getValues('correctDob');
+
+    if (errors.correctDob || !dobRegex.test(correctDob)) return;
+
+    const correctDobDate = createDateFromFormat(correctDob);
+    const formatedCorrectDob = formatDate(correctDobDate, 'do MMMM, yyyy');
+
+    setCorrectDobInWords(formatedCorrectDob);
+    setValue('correctDobInWords', formatedCorrectDob);
+  };
+
+  const onSubmit = (formData: ChangeOfDateOfBirthFormData) => {
     const data = {
-      phone: formData.phone,
+      wrongDob: formData.wrongDob,
+      correctDob: formData.correctDob,
       name: formData.name.toUpperCase(),
       lga: capitalizeEveryWord(formData.lga),
       outputFileName: formData.outputFileName,
       state: capitalizeEveryWord(formData.state),
+      authority: formData.authority.toUpperCase(),
       gender: capitalizeEveryWord(formData.gender),
-      simNetwork: formData.simNetwork.toUpperCase(),
-      previousName: formData.previousName.toUpperCase(),
       religion: capitalizeEveryWord(formData.religion),
       nationality: capitalizeEveryWord(formData.nationality),
+      wrongDobInWords: capitalizeEveryWord(formData.wrongDobInWords),
+      correctDobInWords: capitalizeEveryWord(formData.correctDobInWords),
     };
 
     handleFormSubmit(data);
@@ -94,45 +125,43 @@ export const ChangeOfRegistrationOnSimForm = ({
             {...register('outputFileName', {})}
           />
         </div>
+
+        {/* Authority */}
+        <div className='flex-1 flex flex-col'>
+          <Label
+            htmlFor='authority'
+            className='text-sm text-zinc-500'
+          >
+            Authority/Authorities:
+          </Label>
+          <Input
+            type='text'
+            id='authority'
+            placeholder='BVN or NIMC etc'
+            {...register('authority', {
+              required: 'The authority to inform of the change',
+            })}
+          />
+          {errors.authority && <FormValidationError error={errors.authority} />}
+        </div>
       </div>
 
       {/* Bio details */}
       <div className='flex flex-col sm:flex-row gap-y-2 sm:gap-y-0 gap-x-2 w-full'>
-        {/* Previous name */}
-        <div className='flex-1 flex flex-col'>
-          <Label
-            htmlFor='wrongName'
-            className='text-sm text-zinc-500'
-          >
-            Previous registered name:
-          </Label>
-          <Input
-            type='text'
-            id='previousName'
-            placeholder='Previous name'
-            {...register('previousName', {
-              required: 'The sim was previously registered to',
-            })}
-          />
-          {errors.previousName && (
-            <FormValidationError error={errors.previousName} />
-          )}
-        </div>
-
         {/* Name */}
         <div className='flex-1 flex flex-col'>
           <Label
             htmlFor='name'
             className='text-sm text-zinc-500'
           >
-            New registered name:
+            Name:
           </Label>
           <Input
             type='text'
             id='name'
             placeholder='Name'
             {...register('name', {
-              required: 'The sim will now be registered to',
+              required: 'Enter the correct name of the person',
             })}
           />
           {errors.name && <FormValidationError error={errors.name} />}
@@ -150,7 +179,7 @@ export const ChangeOfRegistrationOnSimForm = ({
             id='gender'
             className='border border-gray-200 text-sm px-2 rounded-md py-[7px] drop-shadow-xs'
             {...register('gender', {
-              required: 'Gender of the new registered name',
+              required: 'Select either male or female',
             })}
           >
             {['Male', 'Female'].map((gender) => {
@@ -167,62 +196,7 @@ export const ChangeOfRegistrationOnSimForm = ({
 
           {errors.gender && <FormValidationError error={errors.gender} />}
         </div>
-      </div>
 
-      {/* Phone details */}
-      <div className='flex flex-col sm:flex-row gap-y-2 sm:gap-y-0 gap-x-2 w-full'>
-        {/* Phone */}
-        <div className='flex-1 flex flex-col'>
-          <Label
-            htmlFor='phone'
-            className='text-sm text-zinc-500'
-          >
-            Phone No:
-          </Label>
-          <Input
-            type='text'
-            id='phone'
-            placeholder='09044522012'
-            {...register('phone', {
-              required: 'The phone of the sim card',
-            })}
-          />
-          {errors.phone && <FormValidationError error={errors.phone} />}
-        </div>
-
-        {/* Sim network */}
-        <div className='flex flex-col w-full sm:w-1/3'>
-          <Label
-            htmlFor='simNetwork'
-            className='text-sm text-zinc-500'
-          >
-            Sim network:
-          </Label>
-          <select
-            id='simNetwork'
-            className='border border-gray-200 text-sm px-2 rounded-md py-[7px] drop-shadow-xs'
-            {...register('simNetwork', {
-              required: 'Select the network of the phone',
-            })}
-          >
-            {networks.map((simNetwork) => {
-              return (
-                <option
-                  key={simNetwork}
-                  value={simNetwork.toLowerCase()}
-                >
-                  {simNetwork}
-                </option>
-              );
-            })}
-          </select>
-
-          {errors.gender && <FormValidationError error={errors.gender} />}
-        </div>
-      </div>
-
-      {/* Religion */}
-      <div className='flex flex-col sm:flex-row gap-y-2 sm:gap-y-0 gap-x-2 w-full'>
         {/* Religion */}
         <div className='flex-1 flex flex-col'>
           <Label
@@ -323,6 +297,62 @@ export const ChangeOfRegistrationOnSimForm = ({
             className='border border-zinc-300 p-1 rounded-md text-sm'
           />
           {errors.lga && <FormValidationError error={errors.lga} />}
+        </div>
+      </div>
+
+      <div className='flex flex-col sm:flex-row gap-y-2 sm:gap-y-0 gap-x-2 w-full'>
+        {/* Wrong date of birth */}
+        <div className='flex-1 flex flex-col'>
+          <Label
+            htmlFor='wrongDob'
+            className='text-sm text-zinc-500'
+          >
+            Wrong date of birth: {!errors.wrongDob ? wrongDobInWords : ''}
+          </Label>
+          <div className='flex gap-x-1 items-center'>
+            <Input
+              type='text'
+              placeholder='dd/mm/yyyy'
+              onKeyUp={handleWrongDobChange}
+              {...register('wrongDob', {
+                required: true,
+                pattern: {
+                  value: /^(0?[1-9]|[12][0-9]|3[01])\/(0?[1-9]|1[0-2])\/\d{4}$/,
+                  message: 'Enter a valid date (eg. 18/02/1998)',
+                },
+              })}
+            />
+          </div>
+
+          {errors.wrongDob && <FormValidationError error={errors.wrongDob} />}
+        </div>
+
+        {/* Correct date of birth */}
+        <div className='flex-1 flex flex-col'>
+          <Label
+            htmlFor='correctDob'
+            className='text-sm text-zinc-500'
+          >
+            Correct date of birth: {!errors.correctDob ? correctDobInWords : ''}
+          </Label>
+          <div className='flex gap-x-1 items-center'>
+            <Input
+              type='text'
+              placeholder='dd/mm/yyyy'
+              onKeyUp={handleCorrectDobChange}
+              {...register('correctDob', {
+                required: true,
+                pattern: {
+                  value: dobRegex,
+                  message: 'Enter a valid date (eg. 18/02/1998)',
+                },
+              })}
+            />
+          </div>
+
+          {errors.correctDob && (
+            <FormValidationError error={errors.correctDob} />
+          )}
         </div>
       </div>
 

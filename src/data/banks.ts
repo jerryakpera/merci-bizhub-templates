@@ -5,7 +5,7 @@ export const banks = [
   'GTBank',
   'Fidelity Bank',
   'Chipper Cash',
-  'Ecobank Nigeria',
+  'Ecobank',
   'Kuda',
   'MoniePoint MicroFinance',
   'Stanbic IBTC Bank',

@@ -48,3 +48,11 @@ export const generateDocument = <T>(
 
   reader.readAsArrayBuffer(file);
 };
+
+export const createDateFromFormat = (dateString: string): Date => {
+  const [day, month, year] = dateString.split('/').map(Number);
+
+  return new Date(year, month - 1, day);
+};
+
+export const dobRegex = /^(0?[1-9]|[12][0-9]|3[01])\/(0?[1-9]|1[0-2])\/\d{4}$/;

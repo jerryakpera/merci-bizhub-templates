@@ -32,6 +32,7 @@ export function DatePicker({ date, setDate }: Props) {
           mode='single'
           initialFocus
           selected={date}
+          captionLayout='dropdown'
           onSelect={(date) => setDate(date)}
         />
       </PopoverContent>
