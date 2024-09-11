@@ -57,3 +57,16 @@ export type GuardianshipFormData = AffidavitFormData & {
 
   relationshipToMinor: string;
 };
+
+export type RearrangementOfNameFormData = AffidavitFormData & {
+  // Names
+  firstName: string;
+  middleName: string;
+  surname: string;
+  wrongNameArrangement: string;
+  correctNameArrangement: string;
+
+  // Affidavit details
+  authority: string;
+  document: string;
+};
