@@ -8,4 +8,5 @@ export const affidavitTypes = [
   'Affidavit as to Domicile',
   'Change of Registration on Sim',
   'Change of Date of Birth and Rearrangement of Name',
+  'Correction of Name and DOB',
 ].sort();

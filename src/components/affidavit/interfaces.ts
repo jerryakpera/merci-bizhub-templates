@@ -78,3 +78,24 @@ export type AffidavitAsToDomicileFormData = AffidavitFormData & {
 
   relationshipToSpouse: string;
 };
+
+export type CorrectionOfNameAndDateOfBirthFormData = AffidavitFormData & {
+  // Names
+  fullName: string;
+
+  authority: string;
+
+  wrongSurname: string;
+  wrongFirstName: string;
+  wrongOtherName: string;
+
+  correctSurname: string;
+  correctFirstName: string;
+  correctOtherName: string;
+
+  wrongDob: string;
+  wrongDobInWords: string;
+
+  correctDob: string;
+  correctDobInWords: string;
+};
