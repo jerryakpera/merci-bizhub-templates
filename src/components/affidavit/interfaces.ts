@@ -70,3 +70,11 @@ export type RearrangementOfNameFormData = AffidavitFormData & {
   authority: string;
   document: string;
 };
+
+export type AffidavitAsToDomicileFormData = AffidavitFormData & {
+  fullName: string;
+  spouseName: string;
+  domicile: string;
+
+  relationshipToSpouse: string;
+};
