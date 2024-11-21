@@ -4,6 +4,7 @@ import { generateDocument } from '@/utils';
 import { MTSelect } from '@/components/globals';
 import { affidavitTypes } from '@/data/affidavits';
 import {
+  RemovalOfName,
   ChangeOfNameForm,
   GuardianshipForm,
   AffidavitAsToDomicile,
@@ -17,12 +18,13 @@ import {
   AffidavitFormData,
   ChangeOfNameFormData,
   GuardianshipFormData,
+  RemovalOfNameFormData,
   ChangeOfDateOfBirthFormData,
   RearrangementOfNameFormData,
   AffidavitAsToDomicileFormData,
+  ChangeOfStateOfOriginFormData,
   ChangeOfRegistrationOnSimFormData,
   CorrectionOfNameAndDateOfBirthFormData,
-  ChangeOfStateOfOriginFormData,
 } from '@/components/affidavit/interfaces';
 
 export const Affidavit = () => {
@@ -116,6 +118,15 @@ export const Affidavit = () => {
                 handleFormSubmit<CorrectionOfNameAndDateOfBirthFormData>(
                   formData
                 )
+              }
+            />
+          )}
+
+          {selected === 'Removal of Name'.toLowerCase() && (
+            <RemovalOfName
+              setSelectedFile={setSelectedFile}
+              handleFormSubmit={(formData) =>
+                handleFormSubmit<RemovalOfNameFormData>(formData)
               }
             />
           )}

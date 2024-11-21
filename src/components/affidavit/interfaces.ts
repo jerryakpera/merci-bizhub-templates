@@ -108,3 +108,16 @@ export type CorrectionOfNameAndDateOfBirthFormData = AffidavitFormData & {
   correctDob: string;
   correctDobInWords: string;
 };
+
+export type RemovalOfNameFormData = AffidavitFormData & {
+  fullName: string;
+
+  authority: string;
+
+  surname: string;
+  firstName: string;
+  otherName: string;
+
+  correctName: string;
+  nameToRemove: string;
+};

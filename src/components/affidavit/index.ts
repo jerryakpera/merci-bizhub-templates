@@ -1,3 +1,4 @@
+export * from './RemovalOfName';
 export * from './ChangeOfNameForm';
 export * from './GuardianshipForm';
 export * from './AffidavitAsToDomicile';
