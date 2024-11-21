@@ -10,6 +10,7 @@ import {
   CorrectionOfNameAndDob,
   ChangeOfDateOfBirthForm,
   RearrangementOfNameForm,
+  ChangeOfStateOfOriginForm,
   ChangeOfRegistrationOnSimForm,
 } from '@/components/affidavit';
 import {
@@ -21,6 +22,7 @@ import {
   AffidavitAsToDomicileFormData,
   ChangeOfRegistrationOnSimFormData,
   CorrectionOfNameAndDateOfBirthFormData,
+  ChangeOfStateOfOriginFormData,
 } from '@/components/affidavit/interfaces';
 
 export const Affidavit = () => {
@@ -67,6 +69,15 @@ export const Affidavit = () => {
               setSelectedFile={setSelectedFile}
               handleFormSubmit={(formData) =>
                 handleFormSubmit<GuardianshipFormData>(formData)
+              }
+            />
+          )}
+
+          {selected === 'Change of State of Origin'.toLowerCase() && (
+            <ChangeOfStateOfOriginForm
+              setSelectedFile={setSelectedFile}
+              handleFormSubmit={(formData) =>
+                handleFormSubmit<ChangeOfStateOfOriginFormData>(formData)
               }
             />
           )}

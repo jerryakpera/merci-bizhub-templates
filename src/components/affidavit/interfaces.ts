@@ -37,6 +37,15 @@ export type ChangeOfDateOfBirthFormData = AffidavitFormData & {
   authority: string;
 };
 
+export type ChangeOfStateOfOriginFormData = AffidavitFormData & {
+  name: string;
+  authority: string;
+
+  correctLGA: string;
+  wrongStateOfOrigin: string;
+  correctStateOfOrigin: string;
+};
+
 export type ChangeOfRegistrationOnSimFormData = AffidavitFormData & {
   // Names
   name: string;
