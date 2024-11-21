@@ -43,6 +43,9 @@ export const WrongTransfer = () => {
         'dd/MM/yyyy'
       ),
 
+      tellerId: formData.tellerId,
+      transactionId: formData.transactionId,
+
       sender: formData.sender.toUpperCase(),
       sendersAccountNo: formData.sendersAccountNo,
       sendersBank: formData.sendersBank.toUpperCase(),

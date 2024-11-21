@@ -1,1 +1,7 @@
-export const transactionMethods = ['Mobile', 'POS', 'Bank Desk', 'USSD'];
+export const transactionMethods = [
+  'POS',
+  'USSD',
+  'Mobile',
+  'Bank Desk',
+  'Teller Merchant',
+];

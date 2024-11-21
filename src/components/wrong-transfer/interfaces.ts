@@ -34,4 +34,7 @@ export type WrongTransferFormData = {
   intendedRecipient: string;
   intendedRecipientsAccountNo: string;
   intendedRecipientsBank: string;
+
+  transactionId?: string;
+  tellerId?: string;
 };

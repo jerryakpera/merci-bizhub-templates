@@ -1,5 +1,6 @@
 export const banks = [
   'Access Bank',
+  'FirstMonie',
   'First Bank',
   'UBA',
   'GTBank',

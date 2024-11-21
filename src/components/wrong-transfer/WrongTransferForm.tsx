@@ -30,6 +30,9 @@ export const WrongTransferForm = ({
   const [wordAmount, setWordAmount] = useState('');
   const [formattedAmount, setFormattedAmount] = useState('');
 
+  const [selectedTransactionMethod, setSelectedTransactionMethod] =
+    useState('mobile');
+
   const {
     reset,
     register,
@@ -220,6 +223,9 @@ export const WrongTransferForm = ({
             {...register('transactionMethod', {
               required: 'Select the method used for the transaction',
             })}
+            onChange={(e) => {
+              setSelectedTransactionMethod(e.target.value);
+            }}
           >
             {transactionMethods.map((transactionMethod) => {
               return (
@@ -238,6 +244,52 @@ export const WrongTransferForm = ({
           )}
         </div>
       </div>
+
+      {selectedTransactionMethod == 'teller merchant' && (
+        <div className='grid grid-cols-3 gap-2'>
+          {/* Teller ID */}
+          <div className='col-span-1 md:col-span-1'>
+            <Label
+              htmlFor='tellerId'
+              className='text-sm text-zinc-500'
+            >
+              Teller ID:
+            </Label>
+            <Input
+              type='text'
+              placeholder='IOS991kl'
+              id='tellerId'
+              {...register('tellerId', {
+                required: 'Enter the teller ID of the transaction',
+              })}
+            />
+
+            {errors.tellerId && <FormValidationError error={errors.tellerId} />}
+          </div>
+
+          {/* Transaction ID */}
+          <div className='col-span-1 md:col-span-2'>
+            <Label
+              htmlFor='transactionId'
+              className='text-sm text-zinc-500'
+            >
+              Transaction ID:
+            </Label>
+            <Input
+              type='text'
+              placeholder='AB21112LK'
+              id='transactionId'
+              {...register('transactionId', {
+                required: 'Enter the Transaction ID of the transaction',
+              })}
+            />
+
+            {errors.transactionId && (
+              <FormValidationError error={errors.transactionId} />
+            )}
+          </div>
+        </div>
+      )}
 
       <div className='flex flex-col sm:flex-row gap-y-2 sm:gap-y-0 gap-x-2 w-full'>
         {/* Sender */}
