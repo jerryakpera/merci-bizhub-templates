@@ -6,6 +6,8 @@ import { GuestLayout, ProtectedLayout } from './components/layout';
 import GuestRoute from './components/authentication/GuestRoute';
 import ProtectedRoute from '@/components/authentication/ProtectedRoute';
 
+import * as productsPages from '@/features/products/pages';
+
 export const router = createBrowserRouter([
   {
     path: '/landing',
@@ -40,6 +42,10 @@ export const router = createBrowserRouter([
       {
         path: 'affidavit',
         element: <pages.Affidavit />,
+      },
+      {
+        path: 'products',
+        element: <productsPages.ProductsIndex />,
       },
     ],
   },
