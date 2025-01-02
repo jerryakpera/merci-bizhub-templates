@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import {
   AudioWaveform,
   BookOpen,
@@ -10,6 +11,7 @@ import {
   PieChart,
   Settings2,
   SquareTerminal,
+  Home,
 } from 'lucide-react';
 
 import {
@@ -18,6 +20,12 @@ import {
   NavUser,
   TeamSwitcher,
 } from '@/components/layout';
+import {
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
+} from '@/components/ui/sidebar';
 
 import {
   Sidebar,
@@ -26,6 +34,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from '@/components/ui/sidebar';
+import { Router } from 'react-router-dom';
 
 // This is sample data.
 const data = {
@@ -163,9 +172,21 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       collapsible='icon'
       {...props}
     >
-      <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
-      </SidebarHeader>
+      <Link to='/'>
+        <SidebarMenuButton
+          size='lg'
+          className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
+        >
+          <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground'>
+            <Home className='size-4 shrink-0' />
+          </div>
+          <div className='grid flex-1 text-left text-sm leading-tight'>
+            <span className='truncate font-semibold'>Merci Bizhub</span>
+            <span className='truncate text-xs'>Print City</span>
+          </div>
+        </SidebarMenuButton>
+      </Link>
+
       <SidebarContent>
         <NavMain items={data.navMain} />
         <NavProjects projects={data.projects} />

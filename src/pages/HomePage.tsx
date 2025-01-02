@@ -1,4 +1,3 @@
-import { TemplatesList } from '@/components/TemplatesList';
 import { Icon } from '@iconify/react/dist/iconify.js';
 
 export const HomePage = () => {
@@ -10,7 +9,7 @@ export const HomePage = () => {
             <div className='w-full md:w-1/2 md:px-3'>
               <div className='w-full pb-6 space-y-6 sm:max-w-md lg:max-w-lg md:space-y-4 lg:space-y-8 xl:space-y-9 sm:pr-5 lg:pr-0 md:pb-0'>
                 <h1 className='text-2xl font-cursive font-extrabold tracking-tight text-gray-900 sm:text-5xl md:text-4xl lg:text-5xl xl:text-6xl'>
-                  <span className='block xl:inline'>Useful Tools to</span>
+                  <span className='block xl:inline'>Useful Tools to </span>
                   <span className='block xl:inline'>
                     Help You Work{' '}
                     <span className='underline font-sans font-bold tracking-narrow text-6xl text-primary'>
@@ -21,18 +20,12 @@ export const HomePage = () => {
                 </h1>
                 <div className='relative flex flex-col sm:flex-row sm:space-x-4'>
                   <a
-                    href='#templatesList'
-                    className='flex items-center w-full px-6 py-3 mb-3 text-lg text-white bg-secondary rounded-md sm:mb-0 hover:bg-secondary sm:w-auto'
-                  >
-                    Try It Free
-                    <Icon icon='formkit:arrowright' />
-                  </a>
-                  <a
                     href='https://merci-bizhub.com/contact'
                     target='_blank'
                     className='flex items-center px-6 py-3 text-white bg-gray-600 rounded-md hover:bg-gray-700 hover:text-white'
                   >
                     Contact the developer
+                    <Icon icon='formkit:arrowright' />
                   </a>
                 </div>
               </div>
@@ -79,13 +72,6 @@ export const HomePage = () => {
             </ul>
           </div>
         </div>
-      </section>
-
-      <section className='my-12'>
-        <h1 className='text-2xl font-bold my-2'>
-          Select any template to get started
-        </h1>
-        <TemplatesList />
       </section>
     </main>
   );

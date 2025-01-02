@@ -45,7 +45,7 @@ export const ProtectedLayout = () => {
           </div>
         </header>
 
-        <div>
+        <div className='px-4'>
           <Outlet />
         </div>
       </SidebarInset>

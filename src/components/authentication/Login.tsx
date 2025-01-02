@@ -11,6 +11,8 @@ import { Alert, AlertTitle } from '@/components/ui/alert';
 import { AuthContext } from '@/contexts/AuthContext';
 import { FormValidationError, Spinner } from '@/components/global';
 
+import { whitelistEmails } from '@/data/valid-emails';
+
 type LoginFields = {
   email: string;
   password: string;
@@ -23,6 +25,7 @@ export const Login = () => {
   const [errorText, setErrorText] = useState('');
 
   const {
+    watch,
     register,
     handleSubmit,
     formState: { errors, isValid, isSubmitting },
@@ -117,30 +120,37 @@ export const Login = () => {
             Forgot your password?
           </Link>
         </div>
-        <Button
-          type='submit'
-          className='w-full'
-          disabled={!isValid || isSubmitting}
-        >
-          <div className='flex justify-center space-x-2 items-center'>
-            <div>Login</div>
 
-            {isSubmitting && <Spinner />}
-          </div>
-        </Button>
-        <Button
-          type='button'
-          variant='outline'
-          className='w-full'
-          disabled={isSubmitting}
-          onClick={handleGoogleSignin}
-        >
-          Login with Google
-          <Icon
-            icon='devicon:google'
-            className='ml-2 text-xl'
-          />
-        </Button>
+        <div className='space-y-4'>
+          <Button
+            type='submit'
+            className='w-full'
+            disabled={
+              !isValid ||
+              isSubmitting ||
+              !whitelistEmails.includes(watch('email'))
+            }
+          >
+            <div className='flex justify-center space-x-2 items-center'>
+              <div>Login</div>
+
+              {isSubmitting && <Spinner />}
+            </div>
+          </Button>
+          <Button
+            type='button'
+            variant='outline'
+            className='w-full'
+            disabled={isSubmitting || !whitelistEmails.includes(watch('email'))}
+            onClick={handleGoogleSignin}
+          >
+            Login with Google
+            <Icon
+              icon='devicon:google'
+              className='ml-2 text-xl'
+            />
+          </Button>
+        </div>
       </div>
     </form>
   );

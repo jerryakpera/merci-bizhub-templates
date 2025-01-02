@@ -12,6 +12,8 @@ import { Alert, AlertTitle } from '@/components/ui/alert';
 import { AuthContext } from '@/contexts/AuthContext';
 import { Spinner, FormValidationError } from '@/components/global';
 
+import { whitelistEmails } from '@/data/valid-emails';
+
 type SignupFields = {
   email: string;
   password: string;
@@ -178,30 +180,40 @@ export const Signup = () => {
             Accept Terms and Conditions
           </label>
         </div>
-        <Button
-          type='submit'
-          className='w-full'
-          disabled={!isValid || !agreedToTerms || isSubmitting}
-        >
-          Create an account{' '}
-          {isSubmitting && (
-            <div className='ml-2'>
-              <Spinner />
-            </div>
-          )}
-        </Button>
-        <div>
+
+        <div className='space-y-2'>
           {!agreedToTerms && (
             <div className='text-sm text-gray-800 font-semibold'>
               You must agree to our Terms and Conditions
             </div>
           )}
           <Button
+            type='submit'
+            className='w-full'
+            disabled={
+              !isValid ||
+              !agreedToTerms ||
+              isSubmitting ||
+              !whitelistEmails.includes(watch('email'))
+            }
+          >
+            Create an account{' '}
+            {isSubmitting && (
+              <div className='ml-2'>
+                <Spinner />
+              </div>
+            )}
+          </Button>
+          <Button
             type='button'
             variant='outline'
             className='w-full'
             onClick={handleGoogleSignin}
-            disabled={!agreedToTerms || isSubmitting}
+            disabled={
+              !agreedToTerms ||
+              isSubmitting ||
+              !whitelistEmails.includes(watch('email'))
+            }
           >
             Sign up with Google
             <Icon
