@@ -18,7 +18,7 @@ export const Dashboard = () => {
             <div className='space-y-2'>
               <div className='flex items-center gap-x-2'>
                 <Icon
-                  icon={group.groupIcon}
+                  icon={groupIcon}
                   width='36'
                   height='36'
                 />

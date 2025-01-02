@@ -1,31 +1,23 @@
 import { useContext } from 'react';
 import { AuthContext } from '@/contexts/AuthContext';
 
-import {
-  Bell,
-  LogOut,
-  Sparkles,
-  BadgeCheck,
-  CreditCard,
-  ChevronsUpDown,
-} from 'lucide-react';
+import { LogOut, ChevronsUpDown } from 'lucide-react';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import {
+  useSidebar,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+} from '@/components/ui/sidebar';
 import {
   DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
-import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
-} from '@/components/ui/sidebar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
 export function NavUser() {
   const { isMobile } = useSidebar();

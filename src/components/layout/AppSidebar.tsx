@@ -1,16 +1,7 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 
-import {
-  Bot,
-  Map,
-  Frame,
-  BookOpen,
-  PieChart,
-  Settings2,
-  SquareTerminal,
-  Home,
-} from 'lucide-react';
+import { Home } from 'lucide-react';
 
 import {
   Sidebar,
@@ -20,34 +11,8 @@ import {
 } from '@/components/ui/sidebar';
 import { SidebarMenuButton } from '@/components/ui/sidebar';
 
+import { NavMain, NavUser } from '@/components/layout';
 import { dashboardGroups } from '@/data/dashboard-groups';
-import { NavMain, NavProjects, NavUser } from '@/components/layout';
-
-// This is sample data.
-const data = {
-  user: {
-    name: 'shadcn',
-    email: 'm@example.com',
-    avatar: '/avatars/shadcn.jpg',
-  },
-  projects: [
-    {
-      name: 'Design Engineering',
-      url: '#',
-      icon: Frame,
-    },
-    {
-      name: 'Sales & Marketing',
-      url: '#',
-      icon: PieChart,
-    },
-    {
-      name: 'Travel',
-      url: '#',
-      icon: Map,
-    },
-  ],
-};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -76,7 +41,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
 
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser />
       </SidebarFooter>
 
       <SidebarRail />
