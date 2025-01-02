@@ -7,9 +7,9 @@ import { Label } from '../ui/label';
 import { Button } from '../ui/button';
 
 import { states } from '@/data';
+import { capitalizeEveryWord } from '@/utils';
 import { FormValidationError } from '../globals';
 import { RemovalOfNameFormData } from './interfaces';
-import { capitalizeEveryWord, dobRegex } from '@/utils';
 
 type Props = {
   setSelectedFile: (selectedFile: File | null) => void;
