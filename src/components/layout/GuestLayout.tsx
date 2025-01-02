@@ -1,13 +1,13 @@
 import { Outlet } from 'react-router-dom';
 
-import { Header } from './Header';
+import { GuestHeader } from './GuestHeader';
 
-export const Layout = () => {
+export const GuestLayout = () => {
   return (
     <div>
       <div className='bg-zinc-200'>
         <div className='w-full px-2 md:w-11/12 md:mx-auto lg:w-5/6 py-3'>
-          <Header />
+          <GuestHeader />
         </div>
       </div>
 

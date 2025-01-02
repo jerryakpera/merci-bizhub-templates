@@ -18,6 +18,7 @@ export const banks = [
   'Polaris Bank',
   'Wema Bank',
   'Heritage Bank',
+  'MOMOPSB Wallet',
   'Keystone Bank',
   'Unity Bank',
   'Stanbic Mobile Money',

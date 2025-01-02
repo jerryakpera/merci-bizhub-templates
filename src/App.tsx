@@ -1,5 +1,5 @@
-import { Layout } from './components/layout';
+import { GuestLayout } from './components/layout';
 
 export default function App() {
-  return <Layout />;
+  return <GuestLayout />;
 }

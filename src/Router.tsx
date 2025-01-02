@@ -1,23 +1,44 @@
 import { createBrowserRouter } from 'react-router-dom';
 
 import * as pages from './pages';
-import { Layout } from './components/layout';
+import { GuestLayout, ProtectedLayout } from './components/layout';
+
+import GuestRoute from './components/authentication/GuestRoute';
+import ProtectedRoute from '@/components/authentication/ProtectedRoute';
 
 export const router = createBrowserRouter([
   {
-    path: '',
-    element: <Layout />,
+    path: '/landing',
+    element: (
+      <GuestRoute>
+        <GuestLayout />
+      </GuestRoute>
+    ),
     children: [
       {
         index: true,
         element: <pages.HomePage />,
       },
+    ],
+  },
+  {
+    path: '/',
+    element: (
+      <ProtectedRoute>
+        <ProtectedLayout />
+      </ProtectedRoute>
+    ),
+    children: [
       {
-        path: '/wrong-transfer',
+        index: true,
+        element: <pages.Dashboard />,
+      },
+      {
+        path: 'wrong-transfer',
         element: <pages.WrongTransfer />,
       },
       {
-        path: '/affidavit',
+        path: 'affidavit',
         element: <pages.Affidavit />,
       },
     ],

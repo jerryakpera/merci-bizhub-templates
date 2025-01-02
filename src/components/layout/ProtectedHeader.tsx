@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 import MerciLogo from '@/assets/logo.png';
-// import { Navbar } from '@/components/layout/Navbar';
+import { Button } from '../ui/button';
 
-export const Header = () => {
+export const ProtectedHeader = () => {
   return (
     <div className='flex items-center justify-between md:flex-row'>
       <div className='relative flex'>
@@ -17,17 +17,9 @@ export const Header = () => {
             />
           </span>
         </Link>
-        {/* <Navbar /> */}
       </div>
 
-      <div className='inline-flex items-center ml-5 space-x-6 lg:justify-end'>
-        <a
-          href='#'
-          className='inline-flex items-center justify-center px-4 py-2 text-base font-medium leading-6 text-white whitespace-no-wrap bg-primary border border-transparent rounded-md shadow-sm hover:bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary'
-        >
-          Sign in
-        </a>
-      </div>
+      <Button>Logout</Button>
     </div>
   );
 };
