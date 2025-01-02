@@ -10,6 +10,8 @@ type Props = {
 const ProtectedRoute = ({ children }: Props) => {
   const { user } = useContext(AuthContext);
 
+  console.log(user);
+
   return <>{user ? children : <Navigate to='/landing' />}</>;
 };
 
