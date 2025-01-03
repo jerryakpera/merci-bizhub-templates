@@ -10,7 +10,7 @@ import { FieldHint } from '@/components/globals';
 import { FormValidationError } from '@/components/global';
 
 type Props = {
-  product: Product;
+  product?: Product;
   handleFormSubmit: (formData: NewProduct) => void;
 };
 
