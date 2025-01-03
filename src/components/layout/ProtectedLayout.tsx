@@ -9,9 +9,10 @@ import {
 import { Separator } from '@/components/ui/separator';
 import {
   SidebarInset,
-  SidebarProvider,
   SidebarTrigger,
+  SidebarProvider,
 } from '@/components/ui/sidebar';
+import { Toaster } from '@/components/ui/toaster';
 
 import { AppSidebar } from '@/components/layout';
 
@@ -47,6 +48,7 @@ export const ProtectedLayout = () => {
 
         <div className='px-4'>
           <Outlet />
+          <Toaster />
         </div>
       </SidebarInset>
     </SidebarProvider>

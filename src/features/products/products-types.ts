@@ -8,3 +8,9 @@ export interface Product {
   updatedBy: string;
   productName: string;
 }
+
+export interface NewProduct {
+  price: number;
+  genPrice: number;
+  productName: string;
+}

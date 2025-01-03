@@ -18,7 +18,7 @@ export const ProductsIndex = () => {
   }, [dispatch]);
 
   return (
-    <div>
+    <div className='pb-12'>
       <PageHeader>
         <h1>Products List</h1>
       </PageHeader>

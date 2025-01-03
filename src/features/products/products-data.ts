@@ -101,4 +101,14 @@ export const sampleProducts: Product[] = [
     updatedBy: 'jerryakpera@gmail.com',
     productName: 'Document Shredding',
   },
+  {
+    id: 'prod-11',
+    price: 35.0,
+    genPrice: 45.0,
+    createdAt: 1673308808000,
+    updatedAt: 1673395209000,
+    createdBy: 'jerryakpera@gmail.com',
+    updatedBy: 'jerryakpera@gmail.com',
+    productName: 'Spiral Binding',
+  },
 ];
