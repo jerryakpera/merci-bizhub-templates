@@ -30,6 +30,7 @@ export const SaleForm = ({ sale, handleFormSubmit }: Props) => {
   const products = useSelector(selectProducts);
   const [gen, setGen] = useState<boolean>(false);
   const [filter, setFilter] = useState<string>('');
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>(products);
 
   const {
@@ -47,6 +48,7 @@ export const SaleForm = ({ sale, handleFormSubmit }: Props) => {
   const unitCost = watch('unitCost');
   const quantity = watch('quantity');
   const totalCost = watch('totalCost');
+  const productName = watch('productName');
   const paymentStatus = watch('paymentStatus');
 
   useEffect(() => {
@@ -109,16 +111,19 @@ export const SaleForm = ({ sale, handleFormSubmit }: Props) => {
   }, [sale, setValue, products]);
 
   useEffect(() => {
-    const selectedProductName = watch('productName');
-    const selectedProduct = products.find(
-      (product) => product.productName === selectedProductName
-    );
-
     if (selectedProduct) {
       const unitCost = gen ? selectedProduct.genPrice : selectedProduct.price;
       setValue('unitCost', unitCost);
     }
-  }, [gen, products, setValue, watch]);
+  }, [gen, products, setValue, watch, selectedProduct]);
+
+  useEffect(() => {
+    const selectedProductObj = products.find(
+      (product) => product.productName === productName
+    );
+
+    if (selectedProductObj) setSelectedProduct(selectedProductObj);
+  }, [productName, products, watch]);
 
   const onSubmit = (formData: Partial<Sale>) => {
     const data = {
