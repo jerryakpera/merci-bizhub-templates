@@ -1,13 +1,12 @@
 // Type options for the payment status
-export type PaymentStatus = 'paid' | 'pending';
+export type PaymentStatus = 'Paid' | 'Pending';
 
 // Type options for the payment method
-export type PaymentMethod = 'cash' | 'card' | 'transfer';
+export type PaymentMethod = 'Cash' | 'Card' | 'Transfer';
 
 export interface Sale {
   id: string;
-  date: number;
-  staff: string;
+  paid: number;
   quantity: number;
   unitCost: number;
   totalCost: number;
@@ -17,20 +16,25 @@ export interface Sale {
   updatedBy: string;
   productName: string;
   customerName: string;
-  paymentStatus: string;
-  paymentMethod: string;
   outstandingBalance: number;
+  paymentMethod: PaymentMethod;
+  paymentStatus: PaymentStatus;
+}
+
+export interface NewSale {
+  paid: number;
+  quantity: number;
+  unitCost: number;
+  totalCost: number;
+  productName: string;
+  customerName?: string;
+  outstandingBalance: number;
+  paymentStatus: PaymentStatus;
+  paymentMethod: PaymentMethod;
 }
 
 // Create options for the payment status dropdown
-export const paymentStatusOptions = [
-  { value: 'paid', label: 'Paid' },
-  { value: 'pending', label: 'Pending' },
-];
+export const paymentStatusOptions = ['Paid', 'Pending'];
 
 // Create options for the payment method dropdown
-export const paymentMethodOptions = [
-  { value: 'cash', label: 'Cash' },
-  { value: 'card', label: 'Card' },
-  { value: 'transfer', label: 'Transfer' },
-];
+export const paymentMethodOptions = ['Cash', 'Card', 'Transfer'];

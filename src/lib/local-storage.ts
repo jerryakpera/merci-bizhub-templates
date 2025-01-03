@@ -4,6 +4,7 @@
 
 export const localStorageHelper = {
   productsKey: 'mercibizuhb_products',
+  salesKey: 'mercibizuhb_sales',
 
   /**
    * Get an item from localStorage.

@@ -7,6 +7,7 @@ import GuestRoute from './components/authentication/GuestRoute';
 import ProtectedRoute from '@/components/authentication/ProtectedRoute';
 
 import * as productsPages from '@/features/products/pages';
+import * as salesPages from '@/features/sales/pages';
 
 export const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ export const router = createBrowserRouter([
       {
         path: 'products',
         element: <productsPages.ProductsIndex />,
+      },
+      {
+        path: 'sales',
+        element: <salesPages.SalesIndex />,
       },
     ],
   },
