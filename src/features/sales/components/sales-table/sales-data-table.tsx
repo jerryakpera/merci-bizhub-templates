@@ -25,6 +25,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
 import { AddSale } from '../AddSale';
+import { SalesBreakdown } from '../SalesBreakdown';
+import { Sale } from '../../sales-types';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -162,6 +164,14 @@ export function SalesDataTable<TData, TValue>({
           </Button>
         </div>
       </div>
+
+      {table.getFilteredSelectedRowModel().rows.length > 0 && (
+        <SalesBreakdown
+          sales={table
+            .getFilteredSelectedRowModel()
+            .rows.map((row) => row.original as Sale)}
+        />
+      )}
     </div>
   );
 }

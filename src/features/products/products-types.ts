@@ -1,3 +1,5 @@
+export type ProductCategory = 'Service' | 'Product';
+
 export interface Product {
   id: string;
   price: number;
@@ -7,10 +9,7 @@ export interface Product {
   createdBy: string;
   updatedBy: string;
   productName: string;
+  category: ProductCategory;
 }
 
-export interface NewProduct {
-  price: number;
-  genPrice: number;
-  productName: string;
-}
+export const productCategoryOptions = ['Service', 'Product'];

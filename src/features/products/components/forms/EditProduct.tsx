@@ -6,10 +6,10 @@ import { useToast } from '@/hooks/use-toast';
 import { AppDispatch } from '@/app/stores';
 import { updateProduct } from '../../products-thunk';
 import { AuthContext } from '@/contexts/AuthContext';
-import { NewProduct, Product } from '../../products-types';
 
 import { ProductDialog } from '../ProductDialog';
 import { ProductForm } from '../forms/ProductForm';
+import { Product } from '@/features/products/products-types';
 
 type Props = {
   product: Product;
@@ -23,21 +23,20 @@ export const EditProduct = ({ product }: Props) => {
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const handleUpdateProduct = (newProduct: NewProduct) => {
-    const { id, createdAt, createdBy } = product;
+  const handleUpdateProduct = (newProduct: Partial<Product>) => {
+    const { id } = product;
 
     const currentTimestamp = Date.now();
     const updatedBy = user?.email || '';
 
-    const update: Product = {
+    const update: Partial<Product> = {
       id,
-      createdAt,
-      createdBy,
-      price: newProduct.price,
-      genPrice: newProduct.genPrice,
-      updatedAt: currentTimestamp,
       updatedBy,
-      productName: newProduct.productName,
+      updatedAt: currentTimestamp,
+      category: newProduct.category,
+      price: Number(newProduct.price),
+      productName: newProduct.productName || '',
+      genPrice: Number(newProduct.genPrice),
     };
 
     // Dispatch the updateProduct thunk to update the product

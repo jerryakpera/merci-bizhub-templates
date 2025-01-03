@@ -43,7 +43,7 @@ export const saveProduct = createAsyncThunk(
 
 export const updateProduct = createAsyncThunk(
   'products/updateProduct',
-  async (updatedProduct: Product, { rejectWithValue }) => {
+  async (updatedProduct: Partial<Product>, { rejectWithValue }) => {
     try {
       // Fetch existing products from local storage
       const products =

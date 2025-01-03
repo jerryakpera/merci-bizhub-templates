@@ -3,9 +3,9 @@ import { useState, useContext } from 'react';
 
 import { useToast } from '@/hooks/use-toast';
 
+import { Sale } from '../../sales-types';
 import { AppDispatch } from '@/app/stores';
 import { updateSale } from '../../sales-thunk';
-import { NewSale, Sale } from '../../sales-types';
 import { AuthContext } from '@/contexts/AuthContext';
 
 import { SaleDialog } from '../SaleDialog';
@@ -23,7 +23,7 @@ export const EditSale = ({ sale }: Props) => {
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const handleUpdateSale = (newSale: NewSale) => {
+  const handleUpdateSale = (newSale: Partial<Sale>) => {
     const { id, createdAt, createdBy } = sale;
 
     const currentTimestamp = Date.now();
@@ -33,17 +33,17 @@ export const EditSale = ({ sale }: Props) => {
       id,
       createdAt,
       createdBy,
-      paid: newSale.paid,
+      paid: Number(newSale.paid),
       updatedBy,
-      customerName: newSale.customerName || '',
       updatedAt: currentTimestamp,
-      quantity: newSale.quantity,
-      unitCost: newSale.unitCost,
-      totalCost: newSale.totalCost,
-      paymentStatus: newSale.paymentStatus,
-      paymentMethod: newSale.paymentMethod,
-      outstandingBalance: newSale.outstandingBalance,
-      productName: newSale.productName,
+      quantity: Number(newSale.quantity),
+      unitCost: Number(newSale.unitCost),
+      totalCost: Number(newSale.totalCost),
+      productName: newSale.productName || '',
+      customerName: newSale.customerName || '',
+      paymentStatus: newSale.paymentStatus || 'Paid',
+      paymentMethod: newSale.paymentMethod || 'Cash',
+      outstandingBalance: Number(newSale.outstandingBalance),
     };
 
     // Dispatch the updateSale thunk to update the sale

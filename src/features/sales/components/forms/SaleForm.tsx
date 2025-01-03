@@ -12,14 +12,14 @@ import { FormValidationError } from '@/components/global';
 import { FormLabel } from '@/components/globals/FormLabel';
 
 import { Product } from '@/features/products/products-types';
-import { NewSale, Sale, paymentMethodOptions } from '../../sales-types';
+import { Sale, paymentMethodOptions } from '../../sales-types';
 
 import { fetchProducts } from '@/features/products/products-thunk';
 import { selectProducts } from '@/features/products/products-slice';
 
 type Props = {
   sale?: Sale;
-  handleFormSubmit: (formData: NewSale) => void;
+  handleFormSubmit: (formData: Partial<Sale>) => void;
 };
 
 export const SaleForm = ({ sale, handleFormSubmit }: Props) => {
@@ -35,7 +35,7 @@ export const SaleForm = ({ sale, handleFormSubmit }: Props) => {
     setValue,
     handleSubmit,
     formState: { errors },
-  } = useForm<NewSale>({
+  } = useForm<Partial<Sale>>({
     mode: 'onChange',
     reValidateMode: 'onChange',
   });
@@ -105,29 +105,17 @@ export const SaleForm = ({ sale, handleFormSubmit }: Props) => {
     }
   }, [sale, setValue, products]);
 
-  const onSubmit = (formData: NewSale) => {
-    const {
-      paid,
-      quantity,
-      unitCost,
-      totalCost,
-      productName,
-      customerName,
-      paymentMethod,
-      paymentStatus,
-      outstandingBalance,
-    } = formData;
-
+  const onSubmit = (formData: Partial<Sale>) => {
     const data = {
-      paid: Number(paid),
-      quantity: Number(quantity),
-      unitCost: Number(unitCost),
-      paymentMethod: paymentMethod,
-      totalCost: Number(totalCost),
-      paymentStatus: paymentStatus,
-      productName: productName.trim(),
-      customerName: customerName?.trim() || '',
-      outstandingBalance: Number(outstandingBalance),
+      paid: Number(formData.paid),
+      quantity: Number(formData.quantity),
+      unitCost: Number(formData.unitCost),
+      paymentMethod: formData.paymentMethod,
+      totalCost: Number(formData.totalCost),
+      paymentStatus: formData.paymentStatus,
+      productName: formData.productName?.trim(),
+      customerName: formData.customerName?.trim() || '',
+      outstandingBalance: Number(formData.outstandingBalance),
     };
 
     handleFormSubmit(data);

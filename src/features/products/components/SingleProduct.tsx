@@ -10,6 +10,7 @@ type Props = {
 export const SingleProduct = ({ product }: Props) => {
   const {
     price,
+    category,
     genPrice,
     createdAt,
     createdBy,
@@ -43,10 +44,16 @@ export const SingleProduct = ({ product }: Props) => {
 
   return (
     <div className='space-y-6'>
-      <ProductDetail
-        label='Product name'
-        value={productName}
-      />
+      <div className='grid grid-cols-2'>
+        <ProductDetail
+          label='Product name'
+          value={productName}
+        />
+        <ProductDetail
+          label='Category'
+          value={category}
+        />
+      </div>
 
       <div className='grid grid-cols-2'>
         <div className='cols-span-1'>

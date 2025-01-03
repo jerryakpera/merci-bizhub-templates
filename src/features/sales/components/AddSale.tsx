@@ -3,13 +3,13 @@ import { useContext, useState } from 'react';
 
 import { useToast } from '@/hooks/use-toast';
 
+import { Sale } from '@/features/sales/sales-types';
 import { SaleDialog } from '@/features/sales/components/SaleDialog';
 import { SaleForm } from '@/features/sales/components/forms/SaleForm';
-import { NewSale, Sale } from '@/features/sales/sales-types';
 
 import { AppDispatch } from '@/app/stores';
-import { saveSale } from '@/features/sales/sales-thunk';
 import { AuthContext } from '@/contexts/AuthContext';
+import { saveSale } from '@/features/sales/sales-thunk';
 
 export const AddSale = () => {
   const { toast } = useToast();
@@ -18,22 +18,22 @@ export const AddSale = () => {
 
   const [addSaleDialogOpen, setAddSaleDialogOpen] = useState<boolean>(false);
 
-  const handleAddSale = (newSale: NewSale) => {
+  const handleAddSale = (newSale: Partial<Sale>) => {
     const currentTimestamp = Date.now();
     const createdBy = user?.email || '';
     const updatedBy = createdBy;
 
     const sale: Sale = {
       id: String(currentTimestamp),
-      paid: newSale.paid,
-      quantity: newSale.quantity,
-      unitCost: newSale.unitCost,
-      totalCost: newSale.totalCost,
+      paid: Number(newSale.paid),
+      quantity: Number(newSale.quantity),
+      unitCost: Number(newSale.unitCost),
+      totalCost: Number(newSale.totalCost),
       customerName: newSale.customerName || '',
-      paymentStatus: newSale.paymentStatus,
-      productName: newSale.productName,
-      paymentMethod: newSale.paymentMethod,
-      outstandingBalance: newSale.outstandingBalance,
+      paymentStatus: newSale.paymentStatus || 'Paid',
+      productName: newSale.productName || '',
+      paymentMethod: newSale.paymentMethod || 'Cash',
+      outstandingBalance: Number(newSale.outstandingBalance),
       createdAt: currentTimestamp,
       updatedAt: currentTimestamp,
       createdBy,

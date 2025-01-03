@@ -14,13 +14,33 @@ export const productTableColumns: ColumnDef<Product>[] = [
     accessorKey: 'productName',
     header: ({ column }) => {
       return (
-        <Button
-          variant='ghost'
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Product Name
-          <ArrowUpDown className='ml-2 h-4 w-4' />
-        </Button>
+        <div className='flex items-center gap-x-0'>
+          Product name
+          <Button
+            size='icon'
+            variant='ghost'
+            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          >
+            <ArrowUpDown className='ml-2 h-4 w-4' />
+          </Button>
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: 'category',
+    header: ({ column }) => {
+      return (
+        <div className='flex items-center gap-x-0'>
+          Category
+          <Button
+            size='icon'
+            variant='ghost'
+            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          >
+            <ArrowUpDown className='ml-2 h-4 w-4' />
+          </Button>
+        </div>
       );
     },
   },
@@ -28,19 +48,22 @@ export const productTableColumns: ColumnDef<Product>[] = [
     accessorKey: 'price',
     header: ({ column }) => {
       return (
-        <Button
-          variant='ghost'
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
+        <div className='flex items-center gap-x-0'>
           Price
-          <ArrowUpDown className='ml-2 h-4 w-4' />
-        </Button>
+          <Button
+            size='icon'
+            variant='ghost'
+            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          >
+            <ArrowUpDown className='ml-2 h-4 w-4' />
+          </Button>
+        </div>
       );
     },
     cell: ({ row }) => {
       const price = parseFloat(row.getValue('price'));
       return (
-        <div className='text-center font-medium'>
+        <div className='font-medium'>
           <NairaSign />
           {price}
         </div>
@@ -51,19 +74,22 @@ export const productTableColumns: ColumnDef<Product>[] = [
     accessorKey: 'genPrice',
     header: ({ column }) => {
       return (
-        <Button
-          variant='ghost'
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
+        <div className='flex items-center gap-x-0'>
           Price with gen
-          <ArrowUpDown className='ml-2 h-4 w-4' />
-        </Button>
+          <Button
+            size='icon'
+            variant='ghost'
+            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          >
+            <ArrowUpDown className='ml-2 h-4 w-4' />
+          </Button>
+        </div>
       );
     },
     cell: ({ row }) => {
       const price = parseFloat(row.getValue('genPrice'));
       return (
-        <div className='text-center font-medium'>
+        <div className='font-medium'>
           <NairaSign />
           {price}
         </div>

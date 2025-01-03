@@ -5,13 +5,17 @@ import { Button } from '@/components/ui/button';
 
 import { FormLabel } from '@/components/globals/FormLabel';
 
-import { NewProduct, Product } from '../../products-types';
 import { FieldHint } from '@/components/globals';
 import { FormValidationError } from '@/components/global';
 
+import {
+  Product,
+  productCategoryOptions,
+} from '@/features/products/products-types';
+
 type Props = {
   product?: Product;
-  handleFormSubmit: (formData: NewProduct) => void;
+  handleFormSubmit: (formData: Partial<Product>) => void;
 };
 
 export const ProductForm = ({ product, handleFormSubmit }: Props) => {
@@ -20,26 +24,28 @@ export const ProductForm = ({ product, handleFormSubmit }: Props) => {
     setValue,
     handleSubmit,
     formState: { errors },
-  } = useForm<NewProduct>({
+  } = useForm<Partial<Product>>({
     mode: 'onChange',
     reValidateMode: 'onChange',
   });
 
   if (product && product.id) {
-    const { productName, price, genPrice } = product;
+    const { productName, price, genPrice, category } = product;
 
-    setValue('productName', productName);
     setValue('price', price);
+    setValue('category', category);
     setValue('genPrice', genPrice);
+    setValue('productName', productName);
   }
 
-  const onSubmit = (formData: NewProduct) => {
-    const { productName, price, genPrice } = formData;
+  const onSubmit = (formData: Partial<Product>) => {
+    const { productName, price, genPrice, category } = formData;
 
     const data = {
-      productName: productName.trim(),
+      category: category,
       price: Number(price),
       genPrice: Number(genPrice),
+      productName: productName?.trim(),
     };
 
     handleFormSubmit(data);
@@ -67,6 +73,33 @@ export const ProductForm = ({ product, handleFormSubmit }: Props) => {
           placeholder='Photocopy'
         />
         <FieldHint hint='The name of the product/service eg (printing or photocopy)' />
+      </div>
+
+      <div>
+        <FormLabel
+          htmlForText='category'
+          label='Category'
+        />
+        {errors.category && (
+          <FormValidationError fieldError={errors.category} />
+        )}
+        <select
+          defaultValue='Product'
+          {...register('category')}
+          className='border border-gray-200 text-sm px-2 rounded-md py-[7px] drop-shadow-xs w-full'
+        >
+          {productCategoryOptions.map((pc) => {
+            return (
+              <option
+                key={pc}
+                value={pc}
+              >
+                {pc}
+              </option>
+            );
+          })}
+        </select>
+        <FieldHint hint='The category eg (product or service)' />
       </div>
 
       <div>

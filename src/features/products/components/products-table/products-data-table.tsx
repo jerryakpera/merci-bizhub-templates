@@ -28,7 +28,7 @@ import { useToast } from '@/hooks/use-toast';
 
 import { ProductDialog } from '../ProductDialog';
 import { ProductForm } from '../forms/ProductForm';
-import { NewProduct, Product } from '../../products-types';
+import { Product } from '@/features/products/products-types';
 
 import { AppDispatch } from '@/app/stores';
 import { saveProduct } from '../../products-thunk';
@@ -68,20 +68,21 @@ export function ProductsDataTable<TData, TValue>({
     },
   });
 
-  const handleAddProduct = (newProduct: NewProduct) => {
+  const handleAddProduct = (newProduct: Partial<Product>) => {
     const currentTimestamp = Date.now();
     const createdBy = user?.email || '';
     const updatedBy = createdBy;
 
     const product: Product = {
       id: String(currentTimestamp),
-      price: newProduct.price,
-      genPrice: newProduct.genPrice,
+      price: Number(newProduct.price),
+      genPrice: Number(newProduct.genPrice),
       createdAt: currentTimestamp,
       updatedAt: currentTimestamp,
       createdBy,
       updatedBy,
-      productName: newProduct.productName,
+      category: newProduct.category || 'Service',
+      productName: newProduct.productName || '',
     };
 
     // Dispatch the saveProduct thunk to save the product

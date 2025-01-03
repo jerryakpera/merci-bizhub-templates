@@ -21,18 +21,6 @@ export interface Sale {
   paymentStatus: PaymentStatus;
 }
 
-export interface NewSale {
-  paid: number;
-  quantity: number;
-  unitCost: number;
-  totalCost: number;
-  productName: string;
-  customerName?: string;
-  outstandingBalance: number;
-  paymentStatus: PaymentStatus;
-  paymentMethod: PaymentMethod;
-}
-
 // Create options for the payment status dropdown
 export const paymentStatusOptions = ['Paid', 'Pending'];
 
