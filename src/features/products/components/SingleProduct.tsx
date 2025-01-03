@@ -62,12 +62,14 @@ export const SingleProduct = ({ product }: Props) => {
             value={price}
           />
         </div>
-        <div className='cols-span-1'>
-          <ProductDetail
-            label='Price with gen'
-            value={genPrice}
-          />
-        </div>
+        {category == 'Service' && (
+          <div className='cols-span-1'>
+            <ProductDetail
+              label='Price with gen'
+              value={genPrice}
+            />
+          </div>
+        )}
       </div>
 
       <div className='grid grid-cols-2'>

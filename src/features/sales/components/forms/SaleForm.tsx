@@ -3,10 +3,12 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Input } from '@/components/ui/input';
+import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
 
 import { AppDispatch } from '@/app/stores';
 
+import { Label } from '@/components/ui/label';
 import { FieldHint } from '@/components/globals';
 import { FormValidationError } from '@/components/global';
 import { FormLabel } from '@/components/globals/FormLabel';
@@ -26,6 +28,7 @@ export const SaleForm = ({ sale, handleFormSubmit }: Props) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const products = useSelector(selectProducts);
+  const [gen, setGen] = useState<boolean>(false);
   const [filter, setFilter] = useState<string>('');
   const [filteredProducts, setFilteredProducts] = useState<Product[]>(products);
 
@@ -105,6 +108,18 @@ export const SaleForm = ({ sale, handleFormSubmit }: Props) => {
     }
   }, [sale, setValue, products]);
 
+  useEffect(() => {
+    const selectedProductName = watch('productName');
+    const selectedProduct = products.find(
+      (product) => product.productName === selectedProductName
+    );
+
+    if (selectedProduct) {
+      const unitCost = gen ? selectedProduct.genPrice : selectedProduct.price;
+      setValue('unitCost', unitCost);
+    }
+  }, [gen, products, setValue, watch]);
+
   const onSubmit = (formData: Partial<Sale>) => {
     const data = {
       paid: Number(formData.paid),
@@ -121,11 +136,25 @@ export const SaleForm = ({ sale, handleFormSubmit }: Props) => {
     handleFormSubmit(data);
   };
 
+  const handleSwitchChange = (value: boolean) => {
+    setGen(value);
+  };
+
   return (
     <form
       className='space-y-4'
       onSubmit={handleSubmit(onSubmit)}
     >
+      <div className='flex justify-end'>
+        <div className='flex items-center space-x-2'>
+          <Switch
+            checked={gen}
+            id='generator-on'
+            onCheckedChange={handleSwitchChange}
+          />
+          <Label htmlFor='generator-on'>Generator's On</Label>
+        </div>
+      </div>
       <div>
         <FormLabel
           label='Product/Service name'
@@ -150,7 +179,10 @@ export const SaleForm = ({ sale, handleFormSubmit }: Props) => {
               );
 
               if (selectedProduct) {
-                setValue('unitCost', selectedProduct.price);
+                const unitCost = gen
+                  ? selectedProduct.genPrice
+                  : selectedProduct.price;
+                setValue('unitCost', unitCost);
               }
             }}
           >

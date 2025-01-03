@@ -27,19 +27,28 @@ import { Button } from '@/components/ui/button';
 import { AddSale } from '../AddSale';
 import { SalesBreakdown } from '../SalesBreakdown';
 import { Sale } from '../../sales-types';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '@/app/stores';
+import { deleteSalesByIds } from '../../sales-thunk';
+import { useToast } from '@/hooks/use-toast';
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  refetchSales: () => void;
+  columns: ColumnDef<TData, TValue>[];
 }
 
 export function SalesDataTable<TData, TValue>({
   data,
   columns,
+  refetchSales,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = useState({});
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+
+  const { toast } = useToast();
+  const dispatch = useDispatch<AppDispatch>();
 
   const table = useReactTable({
     data,
@@ -57,6 +66,33 @@ export function SalesDataTable<TData, TValue>({
       columnFilters,
     },
   });
+
+  const handleDeleteSelectedSales = (selectedSales: Sale[]) => {
+    const salesIdsToDelete = selectedSales.map((sale) => sale.id);
+
+    if (
+      confirm(
+        'Are you sure you want to delete these items? This action cannot be undone!'
+      )
+    ) {
+      dispatch(deleteSalesByIds(salesIdsToDelete))
+        .unwrap()
+        .then(() => {
+          toast({
+            title: 'Sales deleted successfully.',
+            description: `Deleted ${selectedSales.length}(s) items.)`,
+          });
+
+          refetchSales();
+        })
+        .catch(() => {
+          toast({
+            title: 'Error deleting sales.',
+            description: `Could not delete ${selectedSales.length}(s) items.)`,
+          });
+        });
+    }
+  };
 
   return (
     <div>
@@ -147,8 +183,21 @@ export function SalesDataTable<TData, TValue>({
 
         <div className='flex items-center justify-end space-x-2 py-4'>
           <Button
-            variant='outline'
             size='sm'
+            onClick={() =>
+              handleDeleteSelectedSales(
+                table
+                  .getFilteredSelectedRowModel()
+                  .rows.map((row) => row.original as Sale)
+              )
+            }
+            disabled={table.getFilteredSelectedRowModel().rows.length == 0}
+          >
+            Delete
+          </Button>
+          <Button
+            size='sm'
+            variant='outline'
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >

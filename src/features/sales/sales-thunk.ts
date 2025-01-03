@@ -88,3 +88,29 @@ export const deleteSale = createAsyncThunk(
     }
   }
 );
+
+export const deleteSalesByIds = createAsyncThunk(
+  'sales/deleteSalesByIds',
+  async (saleIds: string[], { rejectWithValue }) => {
+    try {
+      // Fetch existing sales from local storage
+      const sales =
+        localStorageHelper.getItem<Sale[]>(localStorageHelper.salesKey) || [];
+
+      // Filter out the sales with IDs that match the provided list
+      const updatedSales = sales.filter((sale) => !saleIds.includes(sale.id));
+
+      if (sales.length === updatedSales.length) {
+        return rejectWithValue('No matching sales found for the provided IDs');
+      }
+
+      // Save the updated list back to local storage
+      localStorageHelper.setItem(localStorageHelper.salesKey, updatedSales);
+
+      return updatedSales;
+    } catch (error) {
+      // Handle any errors
+      return rejectWithValue('Failed to delete the sales');
+    }
+  }
+);

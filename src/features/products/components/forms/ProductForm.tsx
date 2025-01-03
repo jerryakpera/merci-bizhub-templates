@@ -20,6 +20,7 @@ type Props = {
 
 export const ProductForm = ({ product, handleFormSubmit }: Props) => {
   const {
+    watch,
     register,
     setValue,
     handleSubmit,
@@ -28,6 +29,8 @@ export const ProductForm = ({ product, handleFormSubmit }: Props) => {
     mode: 'onChange',
     reValidateMode: 'onChange',
   });
+
+  const category = watch('category');
 
   if (product && product.id) {
     const { productName, price, genPrice, category } = product;
@@ -114,45 +117,31 @@ export const ProductForm = ({ product, handleFormSubmit }: Props) => {
           placeholder='50'
           {...register('price', {
             required: 'The price cannot be blank',
-            min: {
-              value: 10,
-              message: 'The price must be higher than 10',
-            },
-            max: {
-              value: 100000,
-              message: 'The price must be lower than 100,000',
-            },
           })}
         />
         <FieldHint hint='The price of a single unit for the service/product' />
       </div>
 
-      <div>
-        <FormLabel
-          label='Price with gen'
-          htmlForText='genPrice'
-        />
-        {errors.genPrice && (
-          <FormValidationError fieldError={errors.genPrice} />
-        )}
-        <Input
-          id='genPrice'
-          type='number'
-          placeholder='50'
-          {...register('genPrice', {
-            required: 'The gen price cannot be blank',
-            min: {
-              value: 10,
-              message: 'The gen price must be higher than 10',
-            },
-            max: {
-              value: 100000,
-              message: 'The gen price must be lower than 100,000',
-            },
-          })}
-        />
-        <FieldHint hint='The price of a single unit for the service/product when on gen' />
-      </div>
+      {category == 'Service' && (
+        <div>
+          <FormLabel
+            label='Price with gen'
+            htmlForText='genPrice'
+          />
+          {errors.genPrice && (
+            <FormValidationError fieldError={errors.genPrice} />
+          )}
+          <Input
+            id='genPrice'
+            type='number'
+            placeholder='50'
+            {...register('genPrice', {
+              required: 'The gen price cannot be blank',
+            })}
+          />
+          <FieldHint hint='The price of a single unit for the service/product when on gen' />
+        </div>
+      )}
 
       <div className='flex justify-end items-center gap-x-2'>
         <Button className='bg-red-700 hover:bg-red-800 duration-75'>
