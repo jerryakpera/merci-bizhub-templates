@@ -10,10 +10,9 @@ import { AppDispatch } from '@/app/stores';
 import { NairaSign } from '@/components/global';
 import { AuthContext } from '@/contexts/AuthContext';
 import {
-  NewSale,
+  Sale,
   PaymentMethod,
   PaymentStatus,
-  Sale,
 } from '@/features/sales/sales-types';
 import { updateSale } from '../sales-thunk';
 

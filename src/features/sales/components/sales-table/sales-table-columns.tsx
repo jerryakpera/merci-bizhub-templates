@@ -11,7 +11,6 @@ import { ViewSale } from '../ViewSale';
 import { EditSale } from '../forms/EditSale';
 import { NairaSign } from '@/components/global';
 import { Sale } from '@/features/sales/sales-types';
-import { SettleBalance } from '../SettleBalance';
 
 export const saleTableColumns: ColumnDef<Sale>[] = [
   {
