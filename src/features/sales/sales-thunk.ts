@@ -1,30 +1,45 @@
-import { localStorageHelper } from '@/lib/local-storage';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-
+import {
+  getDocs,
+  collection,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  doc,
+  writeBatch,
+} from 'firebase/firestore';
+import { db } from '@/firebase';
 import { Sale } from './sales-types';
 
 export const fetchSales = createAsyncThunk('sales/fetchSales', async () => {
-  const sales = localStorageHelper.getItem<Sale[]>(localStorageHelper.salesKey);
-  return sales || [];
+  try {
+    const salesRef = collection(db, 'sales');
+    const salesSnapshot = await getDocs(salesRef);
+    const salesList = salesSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    return salesList as Sale[];
+  } catch (error) {
+    console.error('Error fetching sales:', error);
+    throw new Error('Failed to fetch sales');
+  }
 });
 
 export const saveSale = createAsyncThunk(
   'sales/saveSale',
   async (newSale: Sale, { rejectWithValue }) => {
     try {
-      // Fetch existing sales from local storage
-      const sales =
-        localStorageHelper.getItem<Sale[]>(localStorageHelper.salesKey) || [];
-
-      // Add the new sale to the list
-      const updatedSales = [...sales, newSale];
-
-      // Save the updated list back to local storage
-      localStorageHelper.setItem(localStorageHelper.salesKey, updatedSales);
-
-      return updatedSales;
+      const salesRef = collection(db, 'sales');
+      const docRef = await addDoc(salesRef, newSale);
+      const { id, ...saleData } = newSale;
+      if (!id) {
+        console.log('');
+      }
+      const savedSale = { id: docRef.id, ...saleData }; // Adding the Firestore document ID to the sale
+      return savedSale;
     } catch (error) {
-      // Handle any errors
+      console.error('Error saving sale:', error);
       return rejectWithValue('Failed to save the sale');
     }
   }
@@ -34,30 +49,16 @@ export const updateSale = createAsyncThunk(
   'sales/updateSale',
   async (updatedSale: Partial<Sale>, { rejectWithValue }) => {
     try {
-      // Fetch existing sales from local storage
-      const sales =
-        localStorageHelper.getItem<Sale[]>(localStorageHelper.salesKey) || [];
-
-      // Find the index of the sale to update
-      const saleIndex = sales.findIndex((sale) => sale.id === updatedSale.id);
-
-      if (saleIndex === -1) {
-        return rejectWithValue('Sale not found');
+      if (!updatedSale.id) {
+        return rejectWithValue('Sale ID is required for update');
       }
 
-      // Update the sale at the found index
-      sales[saleIndex] = {
-        ...sales[saleIndex],
-        ...updatedSale,
-        updatedAt: Date.now(), // Update the timestamp
-      };
+      const saleDocRef = doc(db, 'sales', updatedSale.id);
+      await updateDoc(saleDocRef, updatedSale);
 
-      // Save the updated list back to local storage
-      localStorageHelper.setItem(localStorageHelper.salesKey, sales);
-
-      return sales;
+      return { ...updatedSale, id: updatedSale.id };
     } catch (error) {
-      // Handle any errors
+      console.error('Error updating sale:', error);
       return rejectWithValue('Failed to update the sale');
     }
   }
@@ -67,23 +68,11 @@ export const deleteSale = createAsyncThunk(
   'sales/deleteSale',
   async (saleId: string, { rejectWithValue }) => {
     try {
-      // Fetch existing sales from local storage
-      const sales =
-        localStorageHelper.getItem<Sale[]>(localStorageHelper.salesKey) || [];
-
-      // Filter out the sale to be deleted
-      const updatedSales = sales.filter((sale) => sale.id !== saleId);
-
-      if (sales.length === updatedSales.length) {
-        return rejectWithValue('Sale not found');
-      }
-
-      // Save the updated list back to local storage
-      localStorageHelper.setItem(localStorageHelper.salesKey, updatedSales);
-
-      return updatedSales;
+      const saleDocRef = doc(db, 'sales', saleId);
+      await deleteDoc(saleDocRef);
+      return saleId;
     } catch (error) {
-      // Handle any errors
+      console.error('Error deleting sale:', error);
       return rejectWithValue('Failed to delete the sale');
     }
   }
@@ -93,23 +82,17 @@ export const deleteSalesByIds = createAsyncThunk(
   'sales/deleteSalesByIds',
   async (saleIds: string[], { rejectWithValue }) => {
     try {
-      // Fetch existing sales from local storage
-      const sales =
-        localStorageHelper.getItem<Sale[]>(localStorageHelper.salesKey) || [];
+      const batch = writeBatch(db);
 
-      // Filter out the sales with IDs that match the provided list
-      const updatedSales = sales.filter((sale) => !saleIds.includes(sale.id));
+      saleIds.forEach((saleId) => {
+        const saleDocRef = doc(db, 'sales', saleId);
+        batch.delete(saleDocRef);
+      });
 
-      if (sales.length === updatedSales.length) {
-        return rejectWithValue('No matching sales found for the provided IDs');
-      }
-
-      // Save the updated list back to local storage
-      localStorageHelper.setItem(localStorageHelper.salesKey, updatedSales);
-
-      return updatedSales;
+      await batch.commit();
+      return saleIds;
     } catch (error) {
-      // Handle any errors
+      console.error('Error deleting sales:', error);
       return rejectWithValue('Failed to delete the sales');
     }
   }

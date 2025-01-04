@@ -1,17 +1,31 @@
-import { localStorageHelper } from '@/lib/local-storage';
-
 import { createAsyncThunk } from '@reduxjs/toolkit';
-
+import {
+  getDocs,
+  collection,
+  addDoc,
+  updateDoc,
+  writeBatch,
+  deleteDoc,
+  doc,
+} from 'firebase/firestore';
+import { db } from '@/firebase';
 import { Product } from './products-types';
 
 export const fetchProducts = createAsyncThunk(
   'products/fetchProducts',
   async () => {
-    const products = localStorageHelper.getItem<Product[]>(
-      localStorageHelper.productsKey
-    );
-
-    return products || [];
+    try {
+      const productsRef = collection(db, 'products');
+      const productsSnapshot = await getDocs(productsRef);
+      const productsList = productsSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      return productsList as Product[];
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      throw new Error('Failed to fetch products');
+    }
   }
 );
 
@@ -19,23 +33,16 @@ export const saveProduct = createAsyncThunk(
   'products/saveProduct',
   async (newProduct: Product, { rejectWithValue }) => {
     try {
-      // Fetch existing products from local storage
-      const products =
-        localStorageHelper.getItem<Product[]>(localStorageHelper.productsKey) ||
-        [];
-
-      // Add the new product to the list
-      const updatedProducts = [...products, newProduct];
-
-      // Save the updated list back to local storage
-      localStorageHelper.setItem(
-        localStorageHelper.productsKey,
-        updatedProducts
-      );
-
-      return updatedProducts;
+      const productsRef = collection(db, 'products');
+      const docRef = await addDoc(productsRef, newProduct);
+      const { id, ...productData } = newProduct;
+      if (!id) {
+        console.log('');
+      }
+      const savedProduct = { id: docRef.id, ...productData }; // Adding the Firestore document ID to the product
+      return savedProduct;
     } catch (error) {
-      // Handle any errors
+      console.error('Error saving product:', error);
       return rejectWithValue('Failed to save the product');
     }
   }
@@ -45,33 +52,16 @@ export const updateProduct = createAsyncThunk(
   'products/updateProduct',
   async (updatedProduct: Partial<Product>, { rejectWithValue }) => {
     try {
-      // Fetch existing products from local storage
-      const products =
-        localStorageHelper.getItem<Product[]>(localStorageHelper.productsKey) ||
-        [];
-
-      // Find the index of the product to update
-      const productIndex = products.findIndex(
-        (product) => product.id === updatedProduct.id
-      );
-
-      if (productIndex === -1) {
-        return rejectWithValue('Product not found');
+      if (!updatedProduct.id) {
+        return rejectWithValue('Product ID is required for update');
       }
 
-      // Update the product at the found index
-      products[productIndex] = {
-        ...products[productIndex],
-        ...updatedProduct,
-        updatedAt: Date.now(), // Update the timestamp
-      };
+      const productDocRef = doc(db, 'products', updatedProduct.id);
+      await updateDoc(productDocRef, updatedProduct);
 
-      // Save the updated list back to local storage
-      localStorageHelper.setItem(localStorageHelper.productsKey, products);
-
-      return products;
+      return { ...updatedProduct, id: updatedProduct.id };
     } catch (error) {
-      // Handle any errors
+      console.error('Error updating product:', error);
       return rejectWithValue('Failed to update the product');
     }
   }
@@ -81,30 +71,32 @@ export const deleteProduct = createAsyncThunk(
   'products/deleteProduct',
   async (productId: string, { rejectWithValue }) => {
     try {
-      // Fetch existing products from local storage
-      const products =
-        localStorageHelper.getItem<Product[]>(localStorageHelper.productsKey) ||
-        [];
-
-      // Filter out the product to be deleted
-      const updatedProducts = products.filter(
-        (product) => product.id !== productId
-      );
-
-      if (products.length === updatedProducts.length) {
-        return rejectWithValue('Product not found');
-      }
-
-      // Save the updated list back to local storage
-      localStorageHelper.setItem(
-        localStorageHelper.productsKey,
-        updatedProducts
-      );
-
-      return updatedProducts;
+      const productDocRef = doc(db, 'products', productId);
+      await deleteDoc(productDocRef);
+      return productId;
     } catch (error) {
-      // Handle any errors
+      console.error('Error deleting product:', error);
       return rejectWithValue('Failed to delete the product');
+    }
+  }
+);
+
+export const deleteProductsByIds = createAsyncThunk(
+  'products/deleteProductsByIds',
+  async (productIds: string[], { rejectWithValue }) => {
+    try {
+      const batch = writeBatch(db);
+
+      productIds.forEach((productId) => {
+        const productDocRef = doc(db, 'products', productId);
+        batch.delete(productDocRef);
+      });
+
+      await batch.commit();
+      return productIds;
+    } catch (error) {
+      console.error('Error deleting products:', error);
+      return rejectWithValue('Failed to delete the products');
     }
   }
 );

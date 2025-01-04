@@ -1,3 +1,12 @@
+import { Outlet } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { AppDispatch } from '@/app/stores';
+
+import { fetchSales } from '@/features/sales/sales-thunk';
+import { fetchProducts } from '@/features/products/products-thunk';
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -6,51 +15,79 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
-import { Separator } from '@/components/ui/separator';
 import {
   SidebarInset,
   SidebarTrigger,
   SidebarProvider,
 } from '@/components/ui/sidebar';
 import { Toaster } from '@/components/ui/toaster';
+import { Separator } from '@/components/ui/separator';
 
 import { AppSidebar } from '@/components/layout';
+import { LoadingOverlay } from '@/components/global/LoadingOverlay';
 
-import { Outlet } from 'react-router-dom';
+import { selectSalesStatus } from '@/features/sales/sales-slice';
+import { selectProductsStatus } from '@/features/products/products-slice';
 
 export const ProtectedLayout = () => {
-  return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
-        <header className='flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12'>
-          <div className='flex items-center gap-2 px-4'>
-            <SidebarTrigger className='-ml-1' />
-            <Separator
-              orientation='vertical'
-              className='mr-2 h-4'
-            />
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem className='hidden md:block'>
-                  <BreadcrumbLink href='#'>
-                    Building Your Application
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className='hidden md:block' />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
-          </div>
-        </header>
+  const dispatch = useDispatch<AppDispatch>();
 
-        <div className='px-4'>
-          <Outlet />
-          <Toaster />
-        </div>
-      </SidebarInset>
-    </SidebarProvider>
+  const salesStatus = useSelector(selectSalesStatus);
+  const productsStatus = useSelector(selectProductsStatus);
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    dispatch(fetchSales());
+    dispatch(fetchProducts());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (salesStatus !== 'loading' && productsStatus !== 'loading') {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1500);
+    }
+  }, [salesStatus, productsStatus]);
+
+  return (
+    <>
+      {isLoading ? (
+        <LoadingOverlay loadingText='Getting things ready.' />
+      ) : (
+        <SidebarProvider>
+          <AppSidebar />
+          <SidebarInset>
+            <header className='flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12'>
+              <div className='flex items-center gap-2 px-4'>
+                <SidebarTrigger className='-ml-1' />
+                <Separator
+                  orientation='vertical'
+                  className='mr-2 h-4'
+                />
+                <Breadcrumb>
+                  <BreadcrumbList>
+                    <BreadcrumbItem className='hidden md:block'>
+                      <BreadcrumbLink href='#'>
+                        Building Your Application
+                      </BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator className='hidden md:block' />
+                    <BreadcrumbItem>
+                      <BreadcrumbPage>Data Fetching</BreadcrumbPage>
+                    </BreadcrumbItem>
+                  </BreadcrumbList>
+                </Breadcrumb>
+              </div>
+            </header>
+
+            <div className='px-4'>
+              <Outlet />
+              <Toaster />
+            </div>
+          </SidebarInset>
+        </SidebarProvider>
+      )}
+    </>
   );
 };

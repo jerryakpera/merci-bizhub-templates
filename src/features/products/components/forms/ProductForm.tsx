@@ -22,24 +22,20 @@ export const ProductForm = ({ product, handleFormSubmit }: Props) => {
   const {
     watch,
     register,
-    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm<Partial<Product>>({
+    defaultValues: {
+      price: product?.price || 0,
+      genPrice: product?.genPrice || 0,
+      productName: product?.productName || '',
+      category: product?.category || 'Service',
+    },
     mode: 'onChange',
     reValidateMode: 'onChange',
   });
 
   const category = watch('category');
-
-  if (product && product.id) {
-    const { productName, price, genPrice, category } = product;
-
-    setValue('price', price);
-    setValue('category', category);
-    setValue('genPrice', genPrice);
-    setValue('productName', productName);
-  }
 
   const onSubmit = (formData: Partial<Product>) => {
     const { productName, price, genPrice, category } = formData;
