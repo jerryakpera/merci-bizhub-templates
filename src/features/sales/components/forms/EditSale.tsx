@@ -24,17 +24,16 @@ export const EditSale = ({ sale }: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const handleUpdateSale = (newSale: Partial<Sale>) => {
-    const { id, createdAt, createdBy } = sale;
+    const { id, firebaseId } = sale;
 
     const currentTimestamp = Date.now();
     const updatedBy = user?.email || '';
 
-    const update: Sale = {
+    const update: Partial<Sale> = {
       id,
-      createdAt,
-      createdBy,
-      paid: Number(newSale.paid),
       updatedBy,
+      firebaseId,
+      paid: Number(newSale.paid),
       updatedAt: currentTimestamp,
       quantity: Number(newSale.quantity),
       unitCost: Number(newSale.unitCost),

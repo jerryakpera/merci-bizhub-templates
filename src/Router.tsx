@@ -52,6 +52,10 @@ export const router = createBrowserRouter([
         path: 'sales',
         element: <salesPages.SalesIndex />,
       },
+      {
+        path: 'sales/add',
+        element: <salesPages.AddInvoice />,
+      },
     ],
   },
 ]);

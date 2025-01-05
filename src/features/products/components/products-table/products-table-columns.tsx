@@ -8,6 +8,7 @@ import { Product } from '../../products-types';
 import { NairaSign } from '@/components/global';
 import { EditProduct } from '../forms/EditProduct';
 import { ViewProduct } from '../ViewProduct';
+import { Icon } from '@iconify/react/dist/iconify.js';
 
 export const productTableColumns: ColumnDef<Product>[] = [
   {
@@ -23,6 +24,24 @@ export const productTableColumns: ColumnDef<Product>[] = [
           >
             <ArrowUpDown className='ml-2 h-4 w-4' />
           </Button>
+        </div>
+      );
+    },
+    cell: ({ row }) => {
+      const productName = row.getValue<string>('productName');
+      const favorite = row.original.favorite;
+
+      return (
+        <div className='flex items-center font-medium'>
+          {favorite && (
+            <Icon
+              icon='material-symbols-light:star-rounded'
+              width='28'
+              height='28'
+              className='text-amber-500'
+            />
+          )}
+          {productName}
         </div>
       );
     },

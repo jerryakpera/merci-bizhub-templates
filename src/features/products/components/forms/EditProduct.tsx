@@ -24,19 +24,21 @@ export const EditProduct = ({ product }: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const handleUpdateProduct = (newProduct: Partial<Product>) => {
-    const { id } = product;
+    const { firebaseId } = product;
 
     const currentTimestamp = Date.now();
     const updatedBy = user?.email || '';
 
     const update: Partial<Product> = {
-      id,
       updatedBy,
+      firebaseId,
       updatedAt: currentTimestamp,
+      stock: newProduct.stock || 0,
+      favorite: newProduct.favorite,
       category: newProduct.category,
       price: Number(newProduct.price),
-      productName: newProduct.productName || '',
       genPrice: Number(newProduct.genPrice),
+      productName: newProduct.productName || '',
     };
 
     // Dispatch the updateProduct thunk to update the product

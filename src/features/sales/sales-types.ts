@@ -14,6 +14,7 @@ export interface Sale {
   updatedAt: number;
   createdBy: string;
   updatedBy: string;
+  firebaseId?: string;
   productName: string;
   customerName: string;
   outstandingBalance: number;

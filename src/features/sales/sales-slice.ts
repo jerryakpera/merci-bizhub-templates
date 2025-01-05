@@ -1,15 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-import { Sale } from './sales-types';
-import { SliceStatusType } from '../types';
-
 import {
-  saveSale,
   fetchSales,
+  saveSale,
   updateSale,
   deleteSale,
   deleteSalesByIds,
 } from './sales-thunk';
+import { Sale } from './sales-types';
+import { SliceStatusType } from '../types';
 import { RootState } from '@/app/stores';
 
 interface SalesState {
@@ -42,7 +40,7 @@ const salesSlice = createSlice({
       })
       .addCase(fetchSales.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = action.error.message;
+        state.error = action.error?.message;
       })
       // Handle saveSale thunk
       .addCase(saveSale.pending, (state) => {
@@ -52,7 +50,7 @@ const salesSlice = createSlice({
       .addCase(saveSale.fulfilled, (state, action: PayloadAction<Sale>) => {
         state.status = 'succeeded';
         state.error = undefined;
-        state.sales.push(action.payload); // Add the new sale to the list
+        state.sales.push(action.payload); // Add the new sale
       })
       .addCase(saveSale.rejected, (state, action) => {
         state.status = 'failed';

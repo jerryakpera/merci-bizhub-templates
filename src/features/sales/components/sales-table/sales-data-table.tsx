@@ -34,14 +34,12 @@ import { useToast } from '@/hooks/use-toast';
 
 interface DataTableProps<TData, TValue> {
   data: TData[];
-  refetchSales: () => void;
   columns: ColumnDef<TData, TValue>[];
 }
 
 export function SalesDataTable<TData, TValue>({
   data,
   columns,
-  refetchSales,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = useState({});
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -82,8 +80,6 @@ export function SalesDataTable<TData, TValue>({
             title: 'Sales deleted successfully.',
             description: `Deleted ${selectedSales.length}(s) items.)`,
           });
-
-          refetchSales();
         })
         .catch(() => {
           toast({

@@ -1,27 +1,33 @@
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+
+import { db } from '@/firebase';
+import { collection, onSnapshot } from 'firebase/firestore';
 
 import { PageHeader } from '@/components/global';
 
-import { AppDispatch } from '@/app/stores';
-import { fetchSales } from '../sales-thunk';
-import { selectSales } from '@/features/sales/sales-slice';
-
+import { Sale } from '../sales-types';
 import { SalesDataTable } from '../components/sales-table/sales-data-table';
 import { saleTableColumns } from '@/features/sales/components/sales-table/sales-table-columns';
 
 export const SalesIndex = () => {
-  const dispatch = useDispatch<AppDispatch>();
-
-  const sales = useSelector(selectSales);
-
-  const refetchSales = () => {
-    dispatch(fetchSales());
-  };
+  const [sales, setSales] = useState<Sale[]>([]);
 
   useEffect(() => {
-    dispatch(fetchSales());
-  }, [dispatch]);
+    const collectionRef = collection(db, 'sales');
+    const unsubscribe = onSnapshot(collectionRef, (snapshot) => {
+      const updatedData = snapshot.docs.map((doc) => {
+        const data = doc.data() as Sale;
+        return {
+          firebaseId: doc.id,
+          ...data,
+        };
+      });
+      setSales(updatedData);
+    });
+
+    // Cleanup listener on unmount
+    return () => unsubscribe();
+  }, []);
 
   return (
     <div className='pb-12'>
@@ -31,7 +37,6 @@ export const SalesIndex = () => {
       <SalesDataTable
         data={sales}
         columns={saleTableColumns}
-        refetchSales={refetchSales}
       />
     </div>
   );

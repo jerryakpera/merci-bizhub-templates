@@ -18,7 +18,7 @@ export const fetchProducts = createAsyncThunk(
       const productsRef = collection(db, 'products');
       const productsSnapshot = await getDocs(productsRef);
       const productsList = productsSnapshot.docs.map((doc) => ({
-        id: doc.id,
+        firebaseId: doc.id,
         ...doc.data(),
       }));
       return productsList as Product[];
@@ -52,14 +52,16 @@ export const updateProduct = createAsyncThunk(
   'products/updateProduct',
   async (updatedProduct: Partial<Product>, { rejectWithValue }) => {
     try {
-      if (!updatedProduct.id) {
+      const { firebaseId } = updatedProduct;
+      console.log({ firebaseId });
+      if (!firebaseId) {
         return rejectWithValue('Product ID is required for update');
       }
 
-      const productDocRef = doc(db, 'products', updatedProduct.id);
+      const productDocRef = doc(db, 'products', firebaseId);
       await updateDoc(productDocRef, updatedProduct);
 
-      return { ...updatedProduct, id: updatedProduct.id };
+      return { ...updatedProduct, firebaseId };
     } catch (error) {
       console.error('Error updating product:', error);
       return rejectWithValue('Failed to update the product');

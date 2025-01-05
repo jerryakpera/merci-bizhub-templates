@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form';
 
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 
 import { FormLabel } from '@/components/globals/FormLabel';
 
@@ -28,6 +29,7 @@ export const ProductForm = ({ product, handleFormSubmit }: Props) => {
     defaultValues: {
       price: product?.price || 0,
       genPrice: product?.genPrice || 0,
+      favorite: product?.favorite,
       productName: product?.productName || '',
       category: product?.category || 'Service',
     },
@@ -38,9 +40,12 @@ export const ProductForm = ({ product, handleFormSubmit }: Props) => {
   const category = watch('category');
 
   const onSubmit = (formData: Partial<Product>) => {
-    const { productName, price, genPrice, category } = formData;
+    const { productName, firebaseId, price, genPrice, category, favorite } =
+      formData;
 
     const data = {
+      favorite,
+      firebaseId,
       category: category,
       price: Number(price),
       genPrice: Number(genPrice),
@@ -72,6 +77,22 @@ export const ProductForm = ({ product, handleFormSubmit }: Props) => {
           placeholder='Photocopy'
         />
         <FieldHint hint='The name of the product/service eg (printing or photocopy)' />
+      </div>
+
+      <div>
+        <div className='flex items-center space-x-2'>
+          <Checkbox
+            id='terms'
+            {...register('favorite')}
+          />
+          <label
+            htmlFor='terms'
+            className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
+          >
+            Favorite
+          </label>
+        </div>
+        <FieldHint hint='Select if this is a frequently purchased product/service.' />
       </div>
 
       <div>
@@ -118,7 +139,7 @@ export const ProductForm = ({ product, handleFormSubmit }: Props) => {
         <FieldHint hint='The price of a single unit for the service/product' />
       </div>
 
-      {category == 'Service' && (
+      {category == 'Service' ? (
         <div>
           <FormLabel
             label='Price with gen'
@@ -136,6 +157,23 @@ export const ProductForm = ({ product, handleFormSubmit }: Props) => {
             })}
           />
           <FieldHint hint='The price of a single unit for the service/product when on gen' />
+        </div>
+      ) : (
+        <div>
+          <FormLabel
+            label='Stock'
+            htmlForText='stock'
+          />
+          {errors.stock && <FormValidationError fieldError={errors.stock} />}
+          <Input
+            id='stock'
+            type='number'
+            placeholder='50'
+            {...register('stock', {
+              required: 'The stock cannot be blank',
+            })}
+          />
+          <FieldHint hint='The quantity of this product currently in stock' />
         </div>
       )}
 

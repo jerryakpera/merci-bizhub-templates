@@ -3,6 +3,8 @@ import { Icon } from '@iconify/react/dist/iconify.js';
 import { DashboardList } from '@/components/DashboardList';
 import { dashboardGroups } from '@/data/dashboard-groups';
 import { AddSale } from '@/features/sales/components/AddSale';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 
 export const Dashboard = () => {
   return (
@@ -33,6 +35,11 @@ export const Dashboard = () => {
                 </div>
 
                 {groupName == 'Book keeping' && <AddSale />}
+                {groupName == 'Book keeping' && (
+                  <Link to='/'>
+                    <Button>Add Invoice</Button>
+                  </Link>
+                )}
               </div>
             </div>
             <section>
