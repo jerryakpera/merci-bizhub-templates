@@ -55,10 +55,17 @@ export const dashboardGroups = [
         description: 'Manage/View sales for today.',
       },
       {
-        id: 5,
+        id: 4,
         title: 'View all sales',
         icon: 'vaadin:records',
         link: '/sales',
+        description: 'View all purchase records.',
+      },
+      {
+        id: 5,
+        link: '/invoices',
+        title: 'View all invoices',
+        icon: 'bitcoin-icons:invoice-filled',
         description: 'View all purchase records.',
       },
       {

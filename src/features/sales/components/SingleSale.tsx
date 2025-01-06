@@ -53,6 +53,7 @@ export const SingleSale = ({ sale }: Props) => {
 
     const update: Partial<Sale> = {
       paid,
+      firebaseId: sale.firebaseId,
       updatedBy,
       id: sale.id,
       paymentStatus,

@@ -34,11 +34,13 @@ export const Dashboard = () => {
                   </div>
                 </div>
 
-                {groupName == 'Book keeping' && <AddSale />}
                 {groupName == 'Book keeping' && (
-                  <Link to='/'>
-                    <Button>Add Invoice</Button>
-                  </Link>
+                  <div className='flex justify-end gap-x-2'>
+                    <Link to='/invoices/new'>
+                      <Button size='sm'>Add Invoice</Button>
+                    </Link>
+                    <AddSale />
+                  </div>
                 )}
               </div>
             </div>

@@ -6,8 +6,9 @@ import { GuestLayout, ProtectedLayout } from './components/layout';
 import GuestRoute from './components/authentication/GuestRoute';
 import ProtectedRoute from '@/components/authentication/ProtectedRoute';
 
-import * as productsPages from '@/features/products/pages';
 import * as salesPages from '@/features/sales/pages';
+import * as invoicePages from '@/features/invoices/pages';
+import * as productsPages from '@/features/products/pages';
 
 export const router = createBrowserRouter([
   {
@@ -49,12 +50,30 @@ export const router = createBrowserRouter([
         element: <productsPages.ProductsIndex />,
       },
       {
-        path: 'sales',
-        element: <salesPages.SalesIndex />,
+        path: 'invoices',
+        children: [
+          {
+            index: true,
+            element: <invoicePages.InvoiceIndex />,
+          },
+          {
+            path: 'new',
+            element: <invoicePages.AddInvoice />,
+          },
+          {
+            path: ':firebaseId',
+            element: <invoicePages.InvoiceDetail />,
+          },
+        ],
       },
       {
-        path: 'sales/add',
-        element: <salesPages.AddInvoice />,
+        path: 'sales',
+        children: [
+          {
+            index: true,
+            element: <salesPages.SalesIndex />,
+          },
+        ],
       },
     ],
   },

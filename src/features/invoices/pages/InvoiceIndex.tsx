@@ -1,30 +1,31 @@
 import { useEffect, useState } from 'react';
 
 import { PageHeader } from '@/components/global';
-
 import { collection, onSnapshot } from 'firebase/firestore';
 
 import { db } from '@/firebase';
-import { Product } from '../products-types';
-import { ProductsDataTable } from '../components/products-table/products-data-table';
-import { productTableColumns } from '../components/products-table/products-table-columns';
+import { Invoice } from '@/features/invoices/invoice-types';
+import {
+  InvoicesDataTable,
+  invoiceTableColumns,
+} from '@/features/invoices/components';
 
-export const ProductsIndex = () => {
-  const [products, setProducts] = useState<Product[]>([]);
+export const InvoiceIndex = () => {
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
 
   useEffect(() => {
-    const collectionRef = collection(db, 'products');
+    const collectionRef = collection(db, 'invoices');
     const unsubscribe = onSnapshot(collectionRef, (snapshot) => {
       const updatedData = snapshot.docs
         .map((doc) => {
-          const data = doc.data() as Product;
+          const data = doc.data() as Invoice;
           return {
             firebaseId: doc.id,
             ...data,
           };
         })
         .sort((a, b) => b.createdAt - a.createdAt);
-      setProducts(updatedData);
+      setInvoices(updatedData);
     });
 
     // Cleanup listener on unmount
@@ -34,11 +35,11 @@ export const ProductsIndex = () => {
   return (
     <div className='pb-12'>
       <PageHeader>
-        <h1>Products List</h1>
+        <h1>Invoices List</h1>
       </PageHeader>
-      <ProductsDataTable
-        data={products}
-        columns={productTableColumns}
+      <InvoicesDataTable
+        data={invoices}
+        columns={invoiceTableColumns}
       />
     </div>
   );

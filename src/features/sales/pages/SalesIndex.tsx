@@ -15,13 +15,15 @@ export const SalesIndex = () => {
   useEffect(() => {
     const collectionRef = collection(db, 'sales');
     const unsubscribe = onSnapshot(collectionRef, (snapshot) => {
-      const updatedData = snapshot.docs.map((doc) => {
-        const data = doc.data() as Sale;
-        return {
-          firebaseId: doc.id,
-          ...data,
-        };
-      });
+      const updatedData = snapshot.docs
+        .map((doc) => {
+          const data = doc.data() as Sale;
+          return {
+            firebaseId: doc.id,
+            ...data,
+          };
+        })
+        .sort((a, b) => b.createdAt - a.createdAt);
       setSales(updatedData);
     });
 

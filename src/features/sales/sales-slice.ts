@@ -1,23 +1,25 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
-  fetchSales,
   saveSale,
+  fetchSales,
   updateSale,
   deleteSale,
   deleteSalesByIds,
 } from './sales-thunk';
 import { Sale } from './sales-types';
-import { SliceStatusType } from '../types';
 import { RootState } from '@/app/stores';
+import { SliceStatusType } from '../types';
 
 interface SalesState {
   sales: Sale[];
+  genIsOn: boolean;
   status: SliceStatusType;
   error: string | undefined;
 }
 
 const initialState: SalesState = {
   sales: [],
+  genIsOn: false,
   status: 'idle',
   error: undefined,
 };
@@ -25,7 +27,11 @@ const initialState: SalesState = {
 const salesSlice = createSlice({
   name: 'sales',
   initialState,
-  reducers: {},
+  reducers: {
+    toggleGenIsOn(state) {
+      state.genIsOn = !state.genIsOn;
+    },
+  },
   extraReducers: (builder) => {
     builder
       // Handle fetchSales thunk
@@ -117,7 +123,14 @@ const salesSlice = createSlice({
   },
 });
 
+// Export the toggleGenIsOn action
+export const { toggleGenIsOn } = salesSlice.actions;
+
+// Selectors
 export const selectSalesStatus = (state: RootState) => state.sales.status;
-export const selectSales = (state: { sales: SalesState }) => state.sales.sales;
+export const selectSales = (state: { sales: SalesState }) =>
+  state.sales.sales.sort((a, b) => b.createdAt - a.createdAt);
+export const selectGenIsOn = (state: { sales: SalesState }) =>
+  state.sales.genIsOn;
 
 export default salesSlice.reducer;

@@ -2,7 +2,6 @@ import { useForm } from 'react-hook-form';
 
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 
 import { FormLabel } from '@/components/globals/FormLabel';
 
@@ -13,6 +12,7 @@ import {
   Product,
   productCategoryOptions,
 } from '@/features/products/products-types';
+import { useEffect, useState } from 'react';
 
 type Props = {
   product?: Product;
@@ -29,7 +29,6 @@ export const ProductForm = ({ product, handleFormSubmit }: Props) => {
     defaultValues: {
       price: product?.price || 0,
       genPrice: product?.genPrice || 0,
-      favorite: product?.favorite,
       productName: product?.productName || '',
       category: product?.category || 'Service',
     },
@@ -39,14 +38,25 @@ export const ProductForm = ({ product, handleFormSubmit }: Props) => {
 
   const category = watch('category');
 
+  const [isFavorite, setIsFavorite] = useState<boolean>(false);
+  const handleOnChangeFavorite = () => {
+    console.log({ isFavorite });
+    setIsFavorite(!isFavorite);
+  };
+
+  useEffect(() => {
+    if (!product) return;
+
+    setIsFavorite(Boolean(product.favorite));
+  }, [product]);
+
   const onSubmit = (formData: Partial<Product>) => {
-    const { productName, firebaseId, price, genPrice, category, favorite } =
-      formData;
+    const { productName, firebaseId, price, genPrice, category } = formData;
 
     const data = {
-      favorite,
       firebaseId,
       category: category,
+      favorite: isFavorite,
       price: Number(price),
       genPrice: Number(genPrice),
       productName: productName?.trim(),
@@ -62,8 +72,8 @@ export const ProductForm = ({ product, handleFormSubmit }: Props) => {
     >
       <div>
         <FormLabel
-          htmlForText='productName'
           label='Product name'
+          htmlForText='productName'
         />
         {errors.productName && (
           <FormValidationError fieldError={errors.productName} />
@@ -81,16 +91,17 @@ export const ProductForm = ({ product, handleFormSubmit }: Props) => {
 
       <div>
         <div className='flex items-center space-x-2'>
-          <Checkbox
-            id='terms'
-            {...register('favorite')}
+          <input
+            type='checkbox'
+            id='favorite'
+            name='favorite'
+            checked={isFavorite}
+            onChange={handleOnChangeFavorite}
           />
-          <label
-            htmlFor='terms'
-            className='text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
-          >
-            Favorite
-          </label>
+          <FormLabel
+            htmlForText='favorite'
+            label='Fovorite'
+          />
         </div>
         <FieldHint hint='Select if this is a frequently purchased product/service.' />
       </div>

@@ -1,18 +1,18 @@
-import { format } from 'date-fns';
-
-import { ArrowUpDown } from 'lucide-react';
 import { ColumnDef } from '@tanstack/react-table';
 
-import { Badge } from '@/components/ui/badge';
+import { format } from 'date-fns';
+import { ArrowUpDown } from 'lucide-react';
+import { Icon } from '@iconify/react/dist/iconify.js';
+
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 
-import { ViewSale } from '../ViewSale';
-import { EditSale } from '../forms/EditSale';
 import { NairaSign } from '@/components/global';
-import { Sale } from '@/features/sales/sales-types';
+import { Invoice } from '@/features/invoices/invoice-types';
+import { Link } from 'react-router-dom';
+import { Badge } from '@/components/ui/badge';
 
-export const saleTableColumns: ColumnDef<Sale>[] = [
+export const invoiceTableColumns: ColumnDef<Invoice>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -34,6 +34,27 @@ export const saleTableColumns: ColumnDef<Sale>[] = [
     ),
     enableSorting: false,
     enableHiding: false,
+  },
+  {
+    accessorKey: 'customerName',
+    header: ({ column }) => {
+      return (
+        <div className='flex items-center gap-x-0'>
+          Customer
+          <Button
+            size='icon'
+            variant='ghost'
+            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          >
+            <ArrowUpDown className='ml-2 h-4 w-4' />
+          </Button>
+        </div>
+      );
+    },
+    cell: ({ row }) => {
+      const customerName = row.getValue<string>('customerName');
+      return <div className='font-medium'>{customerName}</div>;
+    },
   },
   {
     accessorKey: 'createdBy',
@@ -90,90 +111,12 @@ export const saleTableColumns: ColumnDef<Sale>[] = [
       );
     },
   },
-
-  {
-    accessorKey: 'productName',
-    header: ({ column }) => {
-      return (
-        <div className='flex items-center gap-x-0'>
-          Product/Service
-          <Button
-            size='icon'
-            variant='ghost'
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            <ArrowUpDown className='ml-2 h-4 w-4' />
-          </Button>
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: 'customerName',
-    header: ({ column }) => {
-      return (
-        <div className='flex items-center gap-x-0'>
-          Customer
-          <Button
-            size='icon'
-            variant='ghost'
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            <ArrowUpDown className='ml-2 h-4 w-4' />
-          </Button>
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: 'unitCost',
-    header: ({ column }) => {
-      return (
-        <div className='flex items-center gap-x-0'>
-          Cost
-          <Button
-            size='icon'
-            variant='ghost'
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            <ArrowUpDown className='ml-2 h-4 w-4' />
-          </Button>
-        </div>
-      );
-    },
-    cell: ({ row }) => {
-      const unitCost = parseFloat(row.getValue('unitCost'));
-      return (
-        <div className='font-medium'>
-          <NairaSign />
-          {unitCost}
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: 'quantity',
-    header: ({ column }) => {
-      return (
-        <div className='flex items-center gap-x-0'>
-          Quantity
-          <Button
-            size='icon'
-            variant='ghost'
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            <ArrowUpDown className='ml-2 h-4 w-4' />
-          </Button>
-        </div>
-      );
-    },
-  },
   {
     accessorKey: 'totalCost',
     header: ({ column }) => {
       return (
         <div className='flex items-center gap-x-0'>
-          Total
+          Total Cost
           <Button
             size='icon'
             variant='ghost'
@@ -195,7 +138,7 @@ export const saleTableColumns: ColumnDef<Sale>[] = [
     },
   },
   {
-    accessorKey: 'paid',
+    accessorKey: 'totalPaid',
     header: ({ column }) => {
       return (
         <div className='flex items-center gap-x-0'>
@@ -211,11 +154,11 @@ export const saleTableColumns: ColumnDef<Sale>[] = [
       );
     },
     cell: ({ row }) => {
-      const paid = parseFloat(row.getValue('paid'));
+      const totalPaid = parseFloat(row.getValue('totalPaid'));
       return (
         <div className='font-medium'>
           <NairaSign />
-          {paid}
+          {totalPaid}
         </div>
       );
     },
@@ -276,12 +219,19 @@ export const saleTableColumns: ColumnDef<Sale>[] = [
     id: 'actions',
     header: 'Actions',
     cell: ({ row }) => {
-      const sale = row.original;
+      const invoice = row.original;
 
       return (
         <div className='flex gap-x-1 5 items-center'>
-          <EditSale sale={sale} />
-          <ViewSale sale={sale} />
+          <Link to={`/invoices/${invoice.firebaseId}`}>
+            <Button size='icon'>
+              <Icon
+                icon='lets-icons:view-fill'
+                width='24'
+                height='24'
+              />
+            </Button>
+          </Link>
         </div>
       );
     },

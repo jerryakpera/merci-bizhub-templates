@@ -1,5 +1,5 @@
-import { useContext, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import {
   ColumnDef,
@@ -22,37 +22,21 @@ import {
   TableHeader,
 } from '@/components/ui/table';
 
-import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-
-import { ProductDialog } from '../ProductDialog';
-import { ProductForm } from '../forms/ProductForm';
-import { Product } from '@/features/products/products-types';
-
-import { AppDispatch } from '@/app/stores';
-import { saveProduct } from '../../products-thunk';
-import { AuthContext } from '@/contexts/AuthContext';
 
 interface DataTableProps<TData, TValue> {
   data: TData[];
   columns: ColumnDef<TData, TValue>[];
 }
 
-export function ProductsDataTable<TData, TValue>({
+export function InvoicesDataTable<TData, TValue>({
   data,
   columns,
 }: DataTableProps<TData, TValue>) {
-  const { toast } = useToast();
-  const dispatch = useDispatch<AppDispatch>();
-
-  const { user } = useContext(AuthContext);
-
   const [rowSelection, setRowSelection] = useState({});
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [addProductDialogOpen, setAddProductDialogOpen] =
-    useState<boolean>(false);
 
   const table = useReactTable({
     data,
@@ -71,65 +55,23 @@ export function ProductsDataTable<TData, TValue>({
     },
   });
 
-  const handleAddProduct = (newProduct: Partial<Product>) => {
-    const currentTimestamp = Date.now();
-    const createdBy = user?.email || '';
-    const updatedBy = createdBy;
-
-    const product: Product = {
-      id: String(currentTimestamp),
-      price: Number(newProduct.price),
-      genPrice: Number(newProduct.genPrice),
-      createdAt: currentTimestamp,
-      updatedAt: currentTimestamp,
-      createdBy,
-      updatedBy,
-      category: newProduct.category || 'Service',
-      productName: newProduct.productName || '',
-    };
-
-    // Dispatch the saveProduct thunk to save the product
-    dispatch(saveProduct(product))
-      .unwrap()
-      .then(() => {
-        toast({
-          title: 'Product successfully added',
-          description: `${product.productName} - N${product.price} (N${product.genPrice})`,
-        });
-
-        setAddProductDialogOpen(false);
-      })
-      .catch((error) => {
-        toast({
-          title: 'Product was not added',
-          description: error,
-        });
-      });
-  };
-
   return (
     <div>
       <div className='flex items-center py-4 justify-between'>
         <Input
-          placeholder='Filter products...'
+          placeholder='Filter invoices...'
           value={
-            (table.getColumn('productName')?.getFilterValue() as string) ?? ''
+            (table.getColumn('customerName')?.getFilterValue() as string) ?? ''
           }
           onChange={(event) =>
-            table.getColumn('productName')?.setFilterValue(event.target.value)
+            table.getColumn('customerName')?.setFilterValue(event.target.value)
           }
           className='max-w-sm'
         />
 
-        <ProductDialog
-          title='Add a product'
-          buttonLabel='Add Product'
-          isOpen={addProductDialogOpen}
-          setIsOpen={setAddProductDialogOpen}
-          description='Fill in the form correctly to add a new product.'
-        >
-          <ProductForm handleFormSubmit={handleAddProduct} />
-        </ProductDialog>
+        <Link to='/invoices/new'>
+          <Button size='sm'>Add Invoice</Button>
+        </Link>
       </div>
 
       <div className='rounded-md border'>
@@ -137,18 +79,16 @@ export function ProductsDataTable<TData, TValue>({
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
