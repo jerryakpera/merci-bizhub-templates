@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Input } from '@/components/ui/input';
@@ -14,7 +14,7 @@ import { FormValidationError } from '@/components/global';
 import { FormLabel } from '@/components/globals/FormLabel';
 
 import { Product } from '@/features/products/products-types';
-import { Sale, paymentMethodOptions } from '../../sales-types';
+import { Sale, paymentMethodOptions } from '@/features/sales/sales-types';
 
 import { fetchProducts } from '@/features/products/products-thunk';
 import { selectProducts } from '@/features/products/products-slice';
@@ -165,17 +165,19 @@ export const SaleForm = ({ sale, handleFormSubmit }: Props) => {
           label='Product/Service name'
           htmlForText='productName'
         />
-        {errors.productName && (
-          <FormValidationError fieldError={errors.productName} />
-        )}
         <div className='space-y-1'>
           <Input
             value={filter}
             placeholder='Filter products'
             onChange={(e) => setFilter(e.target.value)}
           />
+          {errors.productName && (
+            <FormValidationError fieldError={errors.productName} />
+          )}
           <select
-            {...register('productName')}
+            {...register('productName', {
+              required: 'Select a product to continue.',
+            })}
             className='border border-gray-200 text-sm px-2 rounded-md py-[7px] drop-shadow-xs w-full'
             onChange={(e) => {
               const selectedProductName = e.target.value;
