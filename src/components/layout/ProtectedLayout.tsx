@@ -1,5 +1,6 @@
-import { Outlet } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { Icon } from '@iconify/react/dist/iconify.js';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { AppDispatch } from '@/app/stores';
@@ -8,18 +9,11 @@ import { fetchSales } from '@/features/sales/sales-thunk';
 import { fetchProducts } from '@/features/products/products-thunk';
 
 import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
-import {
   SidebarInset,
   SidebarTrigger,
   SidebarProvider,
 } from '@/components/ui/sidebar';
+import { Button } from '@/components/ui/button';
 import { Toaster } from '@/components/ui/toaster';
 import { Separator } from '@/components/ui/separator';
 
@@ -30,6 +24,7 @@ import { selectSalesStatus } from '@/features/sales/sales-slice';
 import { selectProductsStatus } from '@/features/products/products-slice';
 
 export const ProtectedLayout = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
   const salesStatus = useSelector(selectSalesStatus);
@@ -50,6 +45,10 @@ export const ProtectedLayout = () => {
     }
   }, [salesStatus, productsStatus]);
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   return (
     <>
       {isLoading ? (
@@ -65,19 +64,16 @@ export const ProtectedLayout = () => {
                   orientation='vertical'
                   className='mr-2 h-4'
                 />
-                <Breadcrumb>
-                  <BreadcrumbList>
-                    <BreadcrumbItem className='hidden md:block'>
-                      <BreadcrumbLink href='#'>
-                        Building Your Application
-                      </BreadcrumbLink>
-                    </BreadcrumbItem>
-                    <BreadcrumbSeparator className='hidden md:block' />
-                    <BreadcrumbItem>
-                      <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                    </BreadcrumbItem>
-                  </BreadcrumbList>
-                </Breadcrumb>
+                <Button
+                  size='sm'
+                  onClick={handleBack}
+                >
+                  <Icon
+                    icon='solar:arrow-left-bold'
+                    width='24'
+                    height='24'
+                  />
+                </Button>
               </div>
             </header>
 

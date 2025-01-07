@@ -93,7 +93,7 @@ export const AddInvoice: React.FC<AddInvoiceProps> = () => {
   };
 
   const handleGenerateInvoice = (): void => {
-    const sales = selectedProducts.map((selectedProduct) => {
+    const sales = selectedProducts.map((selectedProduct, i) => {
       const currentTimestamp = Date.now();
 
       const { product, quantity, customPrice } = selectedProduct;
@@ -106,7 +106,7 @@ export const AddInvoice: React.FC<AddInvoiceProps> = () => {
         quantity,
         unitCost,
         totalCost,
-        id: String(currentTimestamp),
+        id: String(`${i}-${currentTimestamp}`),
         productName: product.productName,
       };
     });

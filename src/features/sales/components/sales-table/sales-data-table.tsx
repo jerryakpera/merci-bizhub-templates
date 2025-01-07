@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import {
   ColumnDef,
@@ -21,25 +22,26 @@ import {
   TableHeader,
 } from '@/components/ui/table';
 
+import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
 import { AddSale } from '../AddSale';
-import { SalesBreakdown } from '../SalesBreakdown';
 import { Sale } from '../../sales-types';
-import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/app/stores';
+import { SalesBreakdown } from '../SalesBreakdown';
 import { deleteSalesByIds } from '../../sales-thunk';
-import { useToast } from '@/hooks/use-toast';
 
 interface DataTableProps<TData, TValue> {
   data: TData[];
+  pageSize: number;
   columns: ColumnDef<TData, TValue>[];
 }
 
 export function SalesDataTable<TData, TValue>({
   data,
   columns,
+  pageSize,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = useState({});
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -62,6 +64,10 @@ export function SalesDataTable<TData, TValue>({
       sorting,
       rowSelection,
       columnFilters,
+      pagination: {
+        pageIndex: 0,
+        pageSize: pageSize || 10,
+      },
     },
   });
 
